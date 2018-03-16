@@ -27,7 +27,7 @@ public final class JSONUtil {
             logger.error( e);
         }
     }
-
+//一个注释
 
     public static void writeJSONToResponseDomain(HttpServletResponse response, JSONObject resJSON){
         try {

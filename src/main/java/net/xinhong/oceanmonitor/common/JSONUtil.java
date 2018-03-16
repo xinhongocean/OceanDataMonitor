@@ -15,6 +15,7 @@ public final class JSONUtil {
     private static final Log logger = LogFactory.getLog(JSONUtil.class);
     private JSONUtil(){}
 
+//add
     public static void writeJSONToResponse(HttpServletResponse response, JSONObject resJSON){
         try {
             response.setContentType("text/html;charset=UTF-8");
@@ -26,7 +27,7 @@ public final class JSONUtil {
             logger.error( e);
         }
     }
-
+//一个注释
 
     public static void writeJSONToResponseDomain(HttpServletResponse response, JSONObject resJSON){
         try {

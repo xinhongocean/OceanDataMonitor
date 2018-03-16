@@ -22,6 +22,7 @@ public final class JSONUtil {
             logger.debug(resJSON.toString());
             out.write(resJSON.toString());
             out.flush();
+            System.out.println("hello");
         } catch (IOException e) {
             logger.error( e);
         }

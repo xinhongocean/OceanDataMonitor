@@ -22,11 +22,12 @@ public final class JSONUtil {
             logger.debug(resJSON.toString());
             out.write(resJSON.toString());
             out.flush();
+            System.out.println("hello");
         } catch (IOException e) {
             logger.error( e);
         }
     }
-
+//kkkkkllllll
 
     public static void writeJSONToResponseDomain(HttpServletResponse response, JSONObject resJSON){
         try {

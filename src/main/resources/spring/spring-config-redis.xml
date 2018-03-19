@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd ">
+	<description>Spring redis Configuration</description>
+
+	<bean name="genericObjectPoolConfig" class="org.apache.commons.pool2.impl.GenericObjectPoolConfig">
+		<property name="maxWaitMillis" value="10000"/>
+		<property name="maxTotal" value="300"/>
+		<property name="minIdle" value="10"/>
+		<property name="maxIdle" value="10"/>
+	</bean>
+
+	<bean id="jedisCluster" class="net.xinhong.oceanmonitor.redis.JedisClusterFactory">
+		<property name="addressConfig">
+			<value>classpath:redis.properties</value>
+		</property>
+		<property name="addressKeyPrefix" value="address" />   <!--  属性文件里  key的前缀 -->
+
+		<property name="timeout" value="8000" />
+		<property name="maxRedirections" value="8" />
+		<property name="genericObjectPoolConfig" ref="genericObjectPoolConfig" />
+	</bean>
+</beans>

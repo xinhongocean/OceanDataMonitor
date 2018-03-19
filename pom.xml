@@ -18,6 +18,7 @@
         <log4j.version>1.2.17</log4j.version>
         <commons-io.version>2.4</commons-io.version>
         <redis.clients.version>2.8.1</redis.clients.version>
+        <mybatis.version>3.4.5</mybatis.version>
     </properties>
 
     <dependencies>
@@ -46,6 +47,24 @@
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
             <version>1.3.03</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis.version}</version>
+        </dependency>
+        <!-- mybatis/spring包 -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.4</version>
         </dependency>
 
         <!-- LOGGING begin -->
@@ -77,6 +96,7 @@
             <artifactId>ojdbc</artifactId>
             <version>14</version>
         </dependency>
+
 
         <!--spring-->
         <dependency>
@@ -209,7 +229,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <package.environment>dev</package.environment>
+                <!--<package.environment>dev</package.environment>-->
                 <build.path>${project.build.outputDirectory}</build.path>
             </properties>
         </profile>

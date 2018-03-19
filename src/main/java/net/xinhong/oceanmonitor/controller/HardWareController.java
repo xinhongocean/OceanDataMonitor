@@ -2,6 +2,9 @@ package net.xinhong.oceanmonitor.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import net.xinhong.oceanmonitor.common.JSONUtil;
+import net.xinhong.oceanmonitor.service.DBservice;
+import net.xinhong.oceanmonitor.service.HardWareService;
+import net.xinhong.oceanmonitor.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

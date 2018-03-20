@@ -13,15 +13,14 @@
         <property name="locations">
             <list>
                 <value>classpath:path.properties</value>
+                <value>classpath:jdbc.properties</value>
             </list>
         </property>
     </bean>
 
        <!-- 开启spring注释 -->
     <context:annotation-config/>
-    <context:component-scan base-package="net.xinhong.oceanmonitor.service"/>
-    <context:component-scan base-package="net.xinhong.oceanmonitor.controller"/>
-    <context:component-scan base-package="net.xinhong.oceanmonitor.dao"/>
+    <context:component-scan base-package="net.xinhong.oceanmonitor"/>
 
     <!-- 导入关联配置 -->
     <import resource="classpath:spring/spring-config-database-dbcp.xml"/>

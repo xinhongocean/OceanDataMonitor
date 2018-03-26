@@ -16,7 +16,7 @@ public class LogInfoDaoImpl implements LogInfoDao {
     Logger logger= Logger.getLogger(LogInfoDaoImpl.class);
     @Autowired
     private ConfigInfo info;
-    @Override
+
     public JSONObject getInfo(String type, String lines) {
         String path= info.getLogPath(type);
         String cmd="tail -n "+lines +" "+path;

@@ -30,20 +30,22 @@ public class LoggInfoController {
     public final void getLogInfo(HttpServletRequest request, HttpServletResponse response) {
         String type = request.getParameter("type");
         String lines=request.getParameter("line");
-        if (type == null || type.isEmpty()) type = "hycom";
+        if (type == null || type.isEmpty()) type = "hycom.process";
         if (lines == null || lines.isEmpty()) lines = "30";
         long tt = System.currentTimeMillis();
+        type+=".log";
         try {
             JSONObject resJSON = iService.getInfo(type,lines);
             logger.debug("查询耗时:" + (System.currentTimeMillis() - tt));
             resJSON.put("delay", (System.currentTimeMillis() - tt));
-            resJSON.put("code", ResStatus.SUCCESSFUL);
+            resJSON.put("code", ResStatus.SUCCESSFUL.getStatusCode());
             JSONUtil.writeJSONToResponse(response, resJSON);
         } catch (Exception e) {
             logger.error("硬件信息查询失败:" + e);
             JSONObject resJSON = new JSONObject();
-            resJSON.put("code", ResStatus.SEARCH_ERROR);
+            resJSON.put("code", ResStatus.SEARCH_ERROR.getStatusCode());
             JSONUtil.writeJSONToResponse(response, resJSON);
         }
+//        response.sendRedirect("http://192.168.1.114:8088/");
     }
 }

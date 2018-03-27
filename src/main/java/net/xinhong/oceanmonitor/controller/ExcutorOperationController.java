@@ -26,18 +26,19 @@ public class ExcutorOperationController {
     @RequestMapping(value = "/start", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
     public final void startExe(HttpServletRequest request, HttpServletResponse response) {
         String type = request.getParameter("type");
-        if (type == null || type.isEmpty()) type = "hycom";
+        if (type == null || type.isEmpty()) type = "hycom.process";
         long tt = System.currentTimeMillis();
+        type+=".start.exe";
         try {
             JSONObject resJSON = service.start(type);
             logger.debug("启动耗时:" + (System.currentTimeMillis() - tt));
             resJSON.put("delay", (System.currentTimeMillis() - tt));
-            resJSON.put("code", ResStatus.SUCCESSFUL);
+            resJSON.put("code", ResStatus.SUCCESSFUL.getStatusCode());
             JSONUtil.writeJSONToResponse(response, resJSON);
         } catch (Exception e) {
             logger.error("启动失败:" + e);
             JSONObject resJSON = new JSONObject();
-            resJSON.put("code", ResStatus.SEARCH_ERROR);
+            resJSON.put("code", ResStatus.SEARCH_ERROR.getStatusCode());
             JSONUtil.writeJSONToResponse(response, resJSON);
         }
     }
@@ -45,18 +46,41 @@ public class ExcutorOperationController {
     @RequestMapping(value = "/end", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
     public final void endExe(HttpServletRequest request, HttpServletResponse response) {
         String type = request.getParameter("type");
-        if (type == null || type.isEmpty()) type = "hycom";
+        if (type == null || type.isEmpty()) type = "hycom.process";
         long tt = System.currentTimeMillis();
+        type+=".start.exe";
         try {
             JSONObject resJSON = service.stop(type);
             logger.debug("终止程序耗时:" + (System.currentTimeMillis() - tt));
             resJSON.put("delay", (System.currentTimeMillis() - tt));
-            resJSON.put("code", ResStatus.SUCCESSFUL);
+            resJSON.put("code", resJSON.get("code"));
             JSONUtil.writeJSONToResponse(response, resJSON);
         } catch (Exception e) {
             logger.error("终止程序失败:" + e);
             JSONObject resJSON = new JSONObject();
             resJSON.put("code", ResStatus.SEARCH_ERROR);
+            JSONUtil.writeJSONToResponse(response, resJSON);
+        }
+    }
+
+    @RequestMapping(value = "/status", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+    public final void getStatus(HttpServletRequest request, HttpServletResponse response) {
+        String type = request.getParameter("type");
+        if (type == null || type.isEmpty()) type = "hycom.process";
+        long tt = System.currentTimeMillis();
+        type+=".start.exe";
+        try {
+            JSONObject resJSON = service.status(type);
+            logger.debug("终止程序耗时:" + (System.currentTimeMillis() - tt));
+            resJSON.put("delay", (System.currentTimeMillis() - tt));
+            resJSON.put("code", resJSON.get("code"));
+            resJSON.put("message",resJSON.get("message"));
+            JSONUtil.writeJSONToResponse(response, resJSON);
+        } catch (Exception e) {
+            logger.error("终止程序失败:" + e);
+            JSONObject resJSON = new JSONObject();
+            resJSON.put("code", ResStatus.SEARCH_ERROR);
+            resJSON.put("message","failed");
             JSONUtil.writeJSONToResponse(response, resJSON);
         }
     }

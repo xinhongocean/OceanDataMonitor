@@ -9,4 +9,6 @@ public interface ExcutorOperationDao {
     JSONObject start(String type);
 
     JSONObject stop(String type);
+
+    JSONObject status(String type);
 }

@@ -18,7 +18,7 @@ public class LogOut {
             String line=null;
             while((line=input.readLine())!=null){
                 sb.append(line);
-                sb.append('\n');
+//                sb.append('\n');
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by wingsby on 2018/3/16.
  */
-@Controller
-@RequestMapping("/hardware")
+//@Controller
+//@RequestMapping("/hardware")
 public class HardWareController {
     private static final Log logger = LogFactory.getLog(HardWareController.class);
     @Autowired

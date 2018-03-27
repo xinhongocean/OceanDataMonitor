@@ -24,4 +24,9 @@ public class ExcutorOperationServiceImpl implements ExcutorOperationService {
     public JSONObject stop(String type) {
         return dao.stop(type);
     }
+
+    @Override
+    public JSONObject status(String type) {
+        return dao.status(type);
+    }
 }

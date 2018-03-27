@@ -1,6 +1,5 @@
 package net.xinhong.oceanmonitor.common;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -21,7 +20,7 @@ public class ConfigInfo {
         return null;
     }
 
-    public String start(String type){
+    public String getExePath(String type){
         Set<String> keys=properties.keySet();
         for(String str:keys){
             if(str.contains(type)&&str.contains(".start.exe"))
@@ -30,12 +29,13 @@ public class ConfigInfo {
         return null;
     }
 
-    public String stop(String type){
-        Set<String> keys=properties.keySet();
-        for(String str:keys){
-            if(str.contains(type)&&str.contains(".stop.exe"))
-                return properties.get(str);
-        }
-        return null;
-    }
+//    public String getStopPath(String type){
+//        Set<String> keys=properties.keySet();
+//        for(String str:keys){
+//            if(str.contains(type)&&str.contains(".stop.exe"))
+//                return properties.get(str);
+//        }
+//        return null;
+//    }
+
 }

@@ -22,8 +22,8 @@ import java.io.IOException;
 @RequestMapping("/DBinfo")
 public class DBController {
     private static final Logger logger = Logger.getLogger(LoggInfoController.class);
-    @Autowired
-    private LogInfoService iService;
+//    @Autowired
+//    private LogInfoService iService;
 
     @RequestMapping(value = "/connectionstatus", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
     public final void getLogInfo(HttpServletRequest request, HttpServletResponse response) {

@@ -24,10 +24,10 @@ public class HardWareController {
     private static final Log logger = LogFactory.getLog(HardWareController.class);
     @Autowired
     private HardWareService hService;
-    @Autowired
-    private RedisService rService;
-    @Autowired
-    private DBservice dbService;
+//    @Autowired
+//    private RedisService rService;
+//    @Autowired
+//    private DBservice dbService;
 
     @RequestMapping(value = "/info", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
     public final void getLoadAveage(HttpServletRequest request, HttpServletResponse response) {
@@ -49,21 +49,21 @@ public class HardWareController {
     }
 
 
-    @RequestMapping(value = "/redisinfo", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
-    public final void getRedisInfo(HttpServletRequest request, HttpServletResponse response) {
-        long tt = System.currentTimeMillis();
-        try {
-            JSONObject resJSON = rService.getInfo("");
-            logger.debug("查询耗时:" + (System.currentTimeMillis() - tt));
-            resJSON.put("delay", (System.currentTimeMillis() - tt));
-            JSONUtil.writeJSONToResponse(response, resJSON);
-        } catch (Exception e) {
-            logger.error("REDIS信息查询失败:" + e);
-            JSONObject resJSON = new JSONObject();
-            resJSON.put("code", "400");
-            JSONUtil.writeJSONToResponse(response, resJSON);
-        }
-    }
+//    @RequestMapping(value = "/redisinfo", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+//    public final void getRedisInfo(HttpServletRequest request, HttpServletResponse response) {
+//        long tt = System.currentTimeMillis();
+//        try {
+//            JSONObject resJSON = rService.getInfo("");
+//            logger.debug("查询耗时:" + (System.currentTimeMillis() - tt));
+//            resJSON.put("delay", (System.currentTimeMillis() - tt));
+//            JSONUtil.writeJSONToResponse(response, resJSON);
+//        } catch (Exception e) {
+//            logger.error("REDIS信息查询失败:" + e);
+//            JSONObject resJSON = new JSONObject();
+//            resJSON.put("code", "400");
+//            JSONUtil.writeJSONToResponse(response, resJSON);
+//        }
+//    }
 
 
 }

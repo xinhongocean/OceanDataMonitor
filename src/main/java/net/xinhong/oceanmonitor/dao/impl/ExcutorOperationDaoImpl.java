@@ -23,7 +23,7 @@ public class ExcutorOperationDaoImpl implements ExcutorOperationDao {
     @Autowired
     private ConfigInfo info;
 
-    @Override
+
     public JSONObject start(String type) {
         JSONObject jsonRes = new JSONObject();
         try {
@@ -43,7 +43,7 @@ public class ExcutorOperationDaoImpl implements ExcutorOperationDao {
         }
     }
 
-    @Override
+
     public JSONObject stop(String type) {
         JSONObject jsonRes = new JSONObject();
         try {

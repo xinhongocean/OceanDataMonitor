@@ -53,7 +53,7 @@ public class HardWareController {
     public final void getRedisInfo(HttpServletRequest request, HttpServletResponse response) {
         long tt = System.currentTimeMillis();
         try {
-            JSONObject resJSON = rService.getInfo();
+            JSONObject resJSON = rService.getInfo("");
             logger.debug("查询耗时:" + (System.currentTimeMillis() - tt));
             resJSON.put("delay", (System.currentTimeMillis() - tt));
             JSONUtil.writeJSONToResponse(response, resJSON);

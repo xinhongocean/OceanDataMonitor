@@ -7,4 +7,7 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface LogInfoDao {
     JSONObject getInfo(String type, String lines);
+
+    JSONObject getDownInfo(String type,String year,String month,
+                           String day);
 }

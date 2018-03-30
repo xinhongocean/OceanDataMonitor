@@ -13,8 +13,16 @@ import org.springframework.stereotype.Service;
 public class LogInfoServiceImpl implements LogInfoService {
     @Autowired
     private LogInfoDao dao;
+
     @Override
     public JSONObject getInfo(String type, String lines) {
-        return dao.getInfo(type,lines);
+        return dao.getInfo(type, lines);
+    }
+
+    @Override
+    public JSONObject getDownInfo(String type, String year, String month,
+                                  String day) {
+        return dao.getDownInfo(type, year, month,
+                day);
     }
 }

@@ -12,8 +12,9 @@
         <property name="ignoreResourceNotFound" value="true"/>
         <property name="locations">
             <list>
-                <!--<value>classpath:path.properties</value>-->
+                <!--<value>classpath:datasize.properties</value>-->
                 <value>classpath:jdbc.properties</value>
+                <!--<value>classpath:path.properties</value>-->
             </list>
         </property>
     </bean>
@@ -22,6 +23,13 @@
           class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="location" value="classpath:path.properties"/>
     </bean>
+
+    <bean id="dataProperties"
+          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:datasize.properties"/>
+    </bean>
+
+
 
        <!-- 开启spring注释 -->
     <context:annotation-config/>

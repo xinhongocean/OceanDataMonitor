@@ -13,8 +13,8 @@ import redis.clients.util.Slowlog;
 @Component
 public class RedisUtil {
 
-	@Autowired
-	JedisPool jedisPool;
+//	@Autowired
+	JedisPool jedisPool=new JedisPool();
 
 	// 获取redis 服务器信息
 	public String getRedisInfo() {

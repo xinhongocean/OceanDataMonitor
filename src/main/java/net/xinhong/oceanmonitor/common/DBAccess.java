@@ -15,7 +15,7 @@ public class DBAccess {
 //加载数据库驱动程序
             Class.forName("oracle.jdbc.driver.OracleDriver");
 //获取数据库链接对象
-            con=DriverManager.getConnection("jdbc:oracle:thin:@192.168.2.207:1521:orcl","foshan","foshan");
+            con=DriverManager.getConnection("jdbc:oracle:thin:@192.6.1.112:1521:xhdb","qhztj","qhztj123");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,0 +1,167 @@
+﻿
+<!DOCTYPE html>
+<!-- saved from url=(0023)http://www.bootcss.com/ -->
+<html lang="zh-CN">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+		<title>新宏数据监控</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="新宏海洋数据监控">
+		<meta name="description" content="新宏海洋数据监控">
+		<meta name="keywords" content="海洋,海洋数据,抓取,监控">
+		<meta name="author" content="zyl">
+		<meta name="robots" content="index,follow">
+
+		<!-- Site CSS -->
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="css/site.min.css">
+		<style>
+			.job-hot {
+			position: absolute;
+			color: #d9534f;
+			right: 0;
+			top: 15px;
+			}
+		</style>
+
+	</head>
+	<body>
+
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		
+	</div>
+	<div class="jumbotron masthead">
+		<div class="container" style="height:90px">
+			<div class="projects-header page-header" style="margin-top:25px;margin-bottom:25px">
+				<h2>新宏数据监控</h2>
+			</div>
+		</div>
+	</div>
+	
+	<div class="bc-social">
+		
+	</div>
+		
+
+	<div class="container projects">
+		<div class="row paramList">
+			<div id='service'>
+			
+			</div>
+			<div id='hardware'>
+				<div class='col-sm-6 col-md-4 col-lg-3'>
+					<div class='thumbnail' style='height: auto;'>
+						<h4 style='margin:5px;font-size:17px'>硬件监控</h4>
+						<div id='info'>
+								
+						</div>
+					</div>
+				</div>
+				<div class='col-sm-6 col-md-4 col-lg-3'>
+					<div class='thumbnail' style='height: auto;'>
+						<h4 style='margin:5px;font-size:17px'>redis内存监控</h4>
+						<div id='redisinfo' style='width:300px;height:400px'>
+						
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			
+			<!-- 模态框（Modal）密码框 -->
+			<div class="modal fade" id="vModal" tabindex="-1" role="dialog"
+				 aria-labelledby="myModalLabel" aria-hidden="show">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close"
+									data-dismiss="modal" aria-hidden="true">
+								&times;
+							</button>
+							<h4 class="modal-title">请输入密码</h4>
+						</div>
+						<div class="modal-body">
+							<input type="password" id="vInput"/>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary" onclick="Monitor.service.aSubmit()">确定</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 模态框（Modal）log -->
+			<div class="modal fade" id="logModal" tabindex="-1" role="dialog"
+				 aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close"
+									data-dismiss="modal" aria-hidden="true">
+								&times;
+							</button>
+							<a id="logType" hidden="true"></a>
+							<h4 id="logTitle" class="modal-title">
+								SOURCE日志
+							</h4>
+							<button class="logkey" onclick='Monitor.service.log(-1 , 1)'>info</button>
+							<button class="logkey" onclick='Monitor.service.log(-1 , 2)'>error</button>
+							<button class="logkey" style='display:none;' onclick='Monitor.service.log(-1)'>all</button>
+						</div>
+						<div class="modal-body" id="logContent" style='height:600px;overflow:auto;'>
+							日志内容
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+									data-dismiss="modal">
+								关闭
+							</button>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal -->
+			</div><!-- /.modal -->
+			
+			<!-- 模态框（Modal）下载文件列表 -->
+			<div class="modal fade" id="downModal" tabindex="-1" role="dialog"
+				 aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close"
+									data-dismiss="modal" aria-hidden="true">
+								&times;
+							</button>
+							<a id="downType" hidden="true"></a>
+							<h4 id="downTitle" class="modal-title">
+								
+							</h4>
+						</div>
+						<div class="modal-body" id="downContent"  style='height:600px;overflow:auto;'>
+							
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+									data-dismiss="modal">
+								关闭
+							</button>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal -->
+			</div><!-- /.modal -->
+		</div>
+	</div>
+	<!-- /.container -->
+
+	<footer class="footer ">
+		
+	</footer>
+
+	<script type="text/javascript" src="js/library/jquery.min.js"></script>
+	<script type="text/javascript" src="js/library/bootstrap.min.js"></script>
+	<script src="js/library/require.js" data-main="js/main"></script>
+	</body>
+</html>

@@ -15,8 +15,8 @@ public class LogInfoServiceImpl implements LogInfoService {
     private LogInfoDao dao;
 
     @Override
-    public JSONObject getInfo(String type, String lines) {
-        return dao.getInfo(type, lines);
+    public JSONObject getInfo(String type, String lines,String key) {
+        return dao.getInfo(type, lines,key);
     }
 
     @Override
@@ -24,5 +24,10 @@ public class LogInfoServiceImpl implements LogInfoService {
                                   String day) {
         return dao.getDownInfo(type, year, month,
                 day);
+    }
+
+    @Override
+    public JSONObject firstQuery(String str) {
+        return dao.firstQuery(str);
     }
 }

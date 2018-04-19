@@ -3,21 +3,19 @@ package net.xinhong.oceanmonitor.dao.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import net.xinhong.oceanmonitor.common.ConfigInfo;
-import net.xinhong.oceanmonitor.common.LogOut;
+import net.xinhong.oceanmonitor.common.LinuxCommander;
+import net.xinhong.oceanmonitor.dao.ExcutorOperationDao;
 import net.xinhong.oceanmonitor.dao.LogInfoDao;
 import org.apache.log4j.Logger;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import org.joda.time.DateTime;
 
 /**
  * Created by wingsby on 2018/3/20.
@@ -28,15 +26,79 @@ public class LogInfoDaoImpl implements LogInfoDao {
     @Autowired
     private ConfigInfo info;
 
-    public JSONObject getInfo(String type, String lines) {
+    @Autowired
+    private ExcutorOperationDao edao;
+
+    public JSONObject getInfo(String type, String lines, String pwd) {
         String path = info.getLogPath(type);
+        String cname = info.getCHNName(type);
         String cmd = "tail -n " + lines + " " + path;
+//        if (pwd != null && !pwd.isEmpty()) {
+////            cmd += "|grep -E \"" + pwd.toUpperCase()+"|"
+////            +pwd.toLowerCase()+"\"";
+//            cmd+="|grep " + pwd.toUpperCase();
+//        }
+        if(pwd!=null&&pwd.length()>0) {
+            String relative = LogInfoDaoImpl.class.getClassLoader().
+                    getResource("").getPath();
+            String shpath = relative + "/log.sh";
+            cmd = "sh " + shpath + " " + lines + " " + path + " " + pwd.toUpperCase();
+        }
         JSONObject resJson = new JSONObject();
         try {
-            List<String> resStr = LogOut.getCMDMessage(cmd);
+            List<String> resStr = LinuxCommander.getCMDMessage(cmd);
+            logger.error(resStr);
             JSONArray array = new JSONArray();
             array.addAll(resStr);
-            resJson.put(type, resStr);
+            resJson.put(type, array);
+            resJson.put("message",array);
+            resJson.put("type", type);
+            resJson.put("path", path);
+            resJson.put("cname", cname);
+            long time = new File(path).lastModified();
+            if (time > 0) {
+                resJson.put("time", time);
+                resJson.put("timestring", new DateTime(time).toString("yyyy-MM-dd HH:mm:ss"));
+            }
+        } catch (Exception e) {
+            logger.error("读取日志文件失败");
+        }
+        return resJson;
+    }
+
+
+
+    public JSONObject errorInfo(String type) {
+        String path = info.getLogPath(type);
+        String cname = info.getCHNName(type);
+        String relative=LogInfoDaoImpl.class.getClassLoader().
+                getResource("").getPath();
+        String shpath=relative+"/log.sh";
+//        String cmd = "tail -n 1000 " + path+" grep -E \"ERROR|error\" ";
+        String cmd="sh "+shpath+" 1000 "+path+" ERROR";
+        JSONObject resJson = new JSONObject();
+        JSONArray array = new JSONArray();
+        try {
+            List<String> resStr = LinuxCommander.getCMDMessage(cmd);
+            if(resStr!=null&&resStr.size()>0){
+                array.addAll(resStr);
+                resJson.put("error", 1);
+            }else{
+                cmd = "tail -n 1 " + path;
+                List<String> logstr = LinuxCommander.getCMDMessage(cmd);
+                array.addAll(logstr);
+                resJson.put("error", 0);
+            }
+            resJson.put("message",array);
+            resJson.put(type, path);
+            resJson.put("type", type);
+            resJson.put("path", resStr);
+            resJson.put("cname", cname);
+            long time = new File(path).lastModified();
+            if (time > 0) {
+                resJson.put("time", time);
+                resJson.put("timestring", new DateTime(time).toString("yyyy-MM-dd HH:mm:ss"));
+            }
         } catch (Exception e) {
             logger.error("读取日志文件失败");
         }
@@ -47,6 +109,7 @@ public class LogInfoDaoImpl implements LogInfoDao {
     public JSONObject getDownInfo(String type, String year, String month,
                                   String day) {
         String path = info.getDataPath(type);
+        String cname = info.getCHNName(type);
         logger.error(path);
         String date = year + month + day;
         if (type.contains("hycom.down") || type.contains("wavewatch.down")) {
@@ -60,54 +123,60 @@ public class LogInfoDaoImpl implements LogInfoDao {
 
         JSONObject resJson = new JSONObject();
         try {
-            List<String> resStr =new ArrayList<>();
-            String relative=LogInfoDaoImpl.class.getClassLoader().
+            List<String> resStr = new ArrayList<>();
+            String relative = LogInfoDaoImpl.class.getClassLoader().
                     getResource("").getPath();
-            String cmd = "sh "+relative+"/status.sh" + " " + path;
+            String cmd = "sh " + relative + "/fileinfo.sh" + " " + path;
             logger.error(cmd);
-            boolean flag=exeCMD(cmd,resStr);
+            boolean flag = LinuxCommander.exeCMD(cmd, resStr);
             int i = 0;
-            for (String str : resStr) {
-                String[] tmp = str.split(" ");
-                System.out.println(str);
-                logger.error(str);
-                if (tmp != null && tmp.length == 2) {
-                    Long size = info.getFileLimitSize(tmp[0]);
-                    if (size != null && tmp[1] != null && tmp[1].matches("\\d+?")) {
-                        if (size <= Long.valueOf(tmp[1])) {
-                            i++;
-                        }
+            JSONArray array = new JSONArray();
+            for (int j = 0; j < resStr.size(); j += 2) {
+                Long size = info.getFileLimitSize(resStr.get(j));
+                if (size != null && resStr.get(j + 1) != null && resStr.get(j + 1).matches("\\d+?")) {
+                    logger.error(resStr.get(j + 1));
+                    if (size <= Long.valueOf(resStr.get(j + 1))) {
+                        i++;
+                        array.add(resStr.get(j));
                     }
                 }
             }
-            resJson.put("DownloadedFiles:", i);
+            resJson.put("DownloadedFilesNum", i);
+            resJson.put("DownloadedFiles", array);
             int num = info.getDownFileNum(type);
-            if (num >= 0) resJson.put("TotalFiles:", num);
+            if (num >= 0) resJson.put("TotalFiles", num);
+            resJson.put("cname", cname);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
         return resJson;
     }
 
-    public  boolean exeCMD(String cmd,List<String> resStr) {
-        StringBuilder sb = new StringBuilder();
+    @Override
+    public JSONObject firstQuery(String machine) {
+        List<String> types = info.getLogTypes(machine);
+        JSONObject resJson = new JSONObject();
+        JSONArray array = new JSONArray();
         try {
-            Process process = Runtime.getRuntime().exec(cmd);
-            InputStreamReader ir = new InputStreamReader(process.getInputStream());
-            BufferedReader input = new BufferedReader(ir);
-            String line = null;
-            logger.error(input);
-            while ((line = input.readLine()) != null) {
-                logger.error(line);
-                sb.append(line);
-                sb.append('\n');
-                if(resStr!=null)resStr.add(line);
+            for (String str : types) {
+                JSONObject obj =
+                        errorInfo(str.replace(".log",""));
+                array.add(obj);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+        } catch (Exception e) {
+            logger.error(e.getMessage());
         }
-        return true;
+        try {
+            List<String> etypes = info.getExeTypes(machine);
+            for (String str : etypes) {
+                array.add(edao.status(str));
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        resJson.put("message", array);
+        return resJson;
     }
+
 
 }

@@ -28,16 +28,55 @@ public class LoggInfoController {
     @Autowired
     private LogInfoService iService;
 
+    @RequestMapping(value = "/firstQuery82", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+    public final void firstQuery82(HttpServletRequest request, HttpServletResponse response) {
+        long tt = System.currentTimeMillis();
+        try {
+            JSONObject resJSON = iService.firstQuery("82");
+            logger.debug("查询耗时:" + (System.currentTimeMillis() - tt));
+            resJSON.put("delay", (System.currentTimeMillis() - tt));
+            resJSON.put("code", ResStatus.SUCCESSFUL.getStatusCode());
+            JSONUtil.writeJSONToResponse(response, resJSON);
+        } catch (Exception e) {
+            logger.error("日志信息查询:" + e);
+            JSONObject resJSON = new JSONObject();
+            resJSON.put("code", ResStatus.SEARCH_ERROR.getStatusCode());
+            JSONUtil.writeJSONToResponse(response, resJSON);
+        }
+    }
+
+    @RequestMapping(value = "/firstQuery", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+    public final void firstQuery(HttpServletRequest request, HttpServletResponse response) {
+        long tt = System.currentTimeMillis();
+        try {
+            JSONObject resJSON = iService.firstQuery(null);
+            logger.debug("查询耗时:" + (System.currentTimeMillis() - tt));
+            resJSON.put("delay", (System.currentTimeMillis() - tt));
+            resJSON.put("code", ResStatus.SUCCESSFUL.getStatusCode());
+            JSONUtil.writeJSONToResponse(response, resJSON);
+        } catch (Exception e) {
+            logger.error("日志信息查询:" + e);
+            JSONObject resJSON = new JSONObject();
+            resJSON.put("code", ResStatus.SEARCH_ERROR.getStatusCode());
+            JSONUtil.writeJSONToResponse(response, resJSON);
+        }
+    }
+
     @RequestMapping(value = "/tail", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
     public final void getLogInfo(HttpServletRequest request, HttpServletResponse response) {
         String type = request.getParameter("type");
         String lines = request.getParameter("line");
+        String keyword = request.getParameter("key");
+
+
         if (type == null || type.isEmpty()) type = "hycom.process";
-        if (lines == null || lines.isEmpty()) lines = "30";
+        if (lines == null || lines.isEmpty()) lines = "200";
+        if (keyword!=null&&keyword.toLowerCase().equals("error"))
+            lines="1000";
         long tt = System.currentTimeMillis();
         type += ".log";
         try {
-            JSONObject resJSON = iService.getInfo(type, lines);
+            JSONObject resJSON = iService.getInfo(type, lines, keyword);
             logger.debug("查询耗时:" + (System.currentTimeMillis() - tt));
             resJSON.put("delay", (System.currentTimeMillis() - tt));
             resJSON.put("code", ResStatus.SUCCESSFUL.getStatusCode());
@@ -63,13 +102,17 @@ public class LoggInfoController {
         String month = request.getParameter("month");
         String day = request.getParameter("day");
         DateTime curDate = DateTime.now();
-        if(type.startsWith("hycom"))curDate=curDate.minusDays(2);
-        else curDate=curDate.minusDays(1);
-        if (year==null  || year.isEmpty()) year = StringUtils.leftPad(Integer.toString(curDate.getYear()), 4, '0');
-        if (month==null || month.isEmpty()) month = StringUtils.leftPad(Integer.toString(curDate.getMonthOfYear()), 2, '0');;
-        if (day==null   || day.isEmpty()) day =  StringUtils.leftPad(Integer.toString(curDate.getDayOfMonth()), 2, '0');
+//        if(curDate.getHourOfDay()<11)
+        curDate = curDate.minusDays(1);
+        if (type.startsWith("hycom")) curDate = curDate.minusDays(1);
+
+        if (year == null || year.isEmpty()) year = StringUtils.leftPad(Integer.toString(curDate.getYear()), 4, '0');
+        if (month == null || month.isEmpty())
+            month = StringUtils.leftPad(Integer.toString(curDate.getMonthOfYear()), 2, '0');
+        ;
+        if (day == null || day.isEmpty()) day = StringUtils.leftPad(Integer.toString(curDate.getDayOfMonth()), 2, '0');
         try {
-            JSONObject resJSON = iService.getDownInfo(type,year,month,day);
+            JSONObject resJSON = iService.getDownInfo(type, year, month, day);
             logger.debug("查询耗时:" + (System.currentTimeMillis() - tt));
             resJSON.put("delay", (System.currentTimeMillis() - tt));
             resJSON.put("code", ResStatus.SUCCESSFUL.getStatusCode());

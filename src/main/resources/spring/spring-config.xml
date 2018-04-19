@@ -7,9 +7,12 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
+  <context:property-placeholder location="classpath:*.properties"
+                                file-encoding="UTF-8" />
     <!-- 属性文件读入 -->
     <bean id = "PropertyPlaceholderConfigurerID" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="ignoreResourceNotFound" value="true"/>
+        <property name="fileEncoding" value="UTF-8"></property>
         <property name="locations">
             <list>
                 <!--<value>classpath:datasize.properties</value>-->
@@ -21,12 +24,14 @@
 
     <bean id="properties"
           class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-        <property name="location" value="classpath:path.properties"/>
+        <property name="location" value="classpath:path.properties"  />
+        <property name="fileEncoding" value="UTF-8"></property>
     </bean>
 
     <bean id="dataProperties"
           class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="location" value="classpath:datasize.properties"/>
+        <property name="fileEncoding" value="UTF-8"></property>
     </bean>
 
 

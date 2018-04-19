@@ -23,8 +23,30 @@ public class ExcutorOperationController {
     @Autowired
     private ExcutorOperationService service;
 
+
+    @RequestMapping(value = "/firstQuery", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+    public final void firstQuery(HttpServletRequest request, HttpServletResponse response) {
+        long tt = System.currentTimeMillis();
+        JSONObject resJSON = service.query();
+//        logger.debug("终止程序耗时:" + (System.currentTimeMillis() - tt));
+        resJSON.put("delay", (System.currentTimeMillis() - tt));
+        resJSON.put("code", resJSON.get("code"));
+        JSONUtil.writeJSONToResponse(response, resJSON);
+    }
+
+    public JSONObject firstQuery() {
+        return  service.query();
+    }
+
+
+
+
     @RequestMapping(value = "/start", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
     public final void startExe(HttpServletRequest request, HttpServletResponse response) {
+        String pwd = request.getParameter("password");
+        if(!pwd.trim().equals("82193302")){
+            return;
+        }
         String type = request.getParameter("type");
         if (type == null || type.isEmpty()) type = "hycom.process";
         long tt = System.currentTimeMillis();
@@ -45,6 +67,10 @@ public class ExcutorOperationController {
 
     @RequestMapping(value = "/end", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
     public final void endExe(HttpServletRequest request, HttpServletResponse response) {
+        String pwd = request.getParameter("password");
+        if(!pwd.trim().equals("82193302")){
+            return;
+        }
         String type = request.getParameter("type");
         if (type == null || type.isEmpty()) type = "hycom.process";
         long tt = System.currentTimeMillis();
@@ -58,7 +84,7 @@ public class ExcutorOperationController {
         } catch (Exception e) {
             logger.error("终止程序失败:" + e);
             JSONObject resJSON = new JSONObject();
-            resJSON.put("code", ResStatus.SEARCH_ERROR);
+            resJSON.put("code",ResStatus.SEARCH_ERROR.getStatusCode());
             JSONUtil.writeJSONToResponse(response, resJSON);
         }
     }
@@ -79,7 +105,7 @@ public class ExcutorOperationController {
         } catch (Exception e) {
             logger.error("终止程序失败:" + e);
             JSONObject resJSON = new JSONObject();
-            resJSON.put("code", ResStatus.SEARCH_ERROR);
+            resJSON.put("code", ResStatus.SEARCH_ERROR.getStatusCode());
             resJSON.put("message","failed");
             JSONUtil.writeJSONToResponse(response, resJSON);
         }

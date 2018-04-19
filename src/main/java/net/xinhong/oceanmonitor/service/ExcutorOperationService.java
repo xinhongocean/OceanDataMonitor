@@ -9,4 +9,5 @@ public interface ExcutorOperationService {
     JSONObject start(String type);
     JSONObject stop(String type);
     JSONObject status(String type);
+    JSONObject query();
 }

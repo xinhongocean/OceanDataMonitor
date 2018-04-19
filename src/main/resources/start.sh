@@ -1,8 +1,12 @@
 echo $1
-if [ $1 -gt 0 ]
+if [ $1 -gt 1 ]
 then
-    echo 1
+    echo 2
     nohup java -server -Xms512m -Xmx4096m -jar $2 >/dev/null &
+elif [ $1 -gt 0 ]
+then
+   echo 1
+   nohup python $2 &
 elif [ $1 == 0 ]
 then
    echo 0

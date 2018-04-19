@@ -11,4 +11,6 @@ public interface ExcutorOperationDao {
     JSONObject stop(String type);
 
     JSONObject status(String type);
+
+    JSONObject query();
 }

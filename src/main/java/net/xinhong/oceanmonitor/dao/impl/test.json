@@ -1,0 +1,355 @@
+{
+  "delay": 1348,
+  "code": 0,
+  "message": [
+    {
+      "path": [],
+      "cname": "海洋局浪温实况图下载",
+      "cnreal": [],
+      "time": 1522832001000,
+      "error": 0,
+      "message": [
+        "2018-04-04 16:53:21,266[INFO] - nmefc_realtime.py:86 - 西北太平洋海浪、表层海温实况图片20180404redis索引保存成功."
+      ],
+      "type": "cnreal",
+      "timestring": "2018-04-04 16:53:21"
+    },
+    {
+      "path": [],
+      "cname": "HYCOM下载",
+      "error": 0,
+      "message": [],
+      "type": "hycom.down",
+      "hycom.down": []
+    },
+    {
+      "path": [],
+      "cncur": [],
+      "cname": "海洋局海流数值预报下载",
+      "time": 1522832361000,
+      "error": 0,
+      "message": [
+        "2018-04-04 16:59:21,375[INFO] - nmefc_curdownload.py:194 - nmefc海流图片20180403redis索引保存成功."
+      ],
+      "type": "cncur",
+      "timestring": "2018-04-04 16:59:21"
+    },
+    {
+      "cnwave": [],
+      "path": [],
+      "cname": "海洋局海浪数值预报下载",
+      "time": 1522831453000,
+      "error": 0,
+      "message": [
+        "2018-04-04 16:44:13,676[INFO] - nmefc_pre_wavedownload.py:114 - nmefc西北太平洋海浪24/48/72预报图片20180404redis索引保存成功."
+      ],
+      "type": "cnwave",
+      "timestring": "2018-04-04 16:44:13"
+    },
+    {
+      "path": [],
+      "cname": "海洋局海表温数值预报下载",
+      "cntemp": [],
+      "time": 1522831215000,
+      "error": 0,
+      "message": [
+        "2018-04-04 16:40:15,553[INFO] - nmefc_tempdownload.py:197 - nmefc海温图片20180403redis索引保存成功."
+      ],
+      "type": "cntemp",
+      "timestring": "2018-04-04 16:40:15"
+    },
+    {
+      "path": [],
+      "cnwind": [],
+      "cname": "海洋局海面风数值预报下载",
+      "time": 1522831097000,
+      "error": 0,
+      "message": [
+        "2018-04-04 16:38:17,999[INFO] - nmefc_winddownload.py:148 - nmefc风场图片20180404redis索引保存成功."
+      ],
+      "type": "cnwind",
+      "timestring": "2018-04-04 16:38:17"
+    },
+    {
+      "path": [],
+      "envform": [],
+      "cname": "近海环境预报下载",
+      "time": 1522832534000,
+      "error": 0,
+      "message": [
+        "2018-04-04 17:02:14,773[INFO] - envform.py:139 - nmefc近海海洋环境预报数据20180404redis索引保存成功."
+      ],
+      "type": "envform",
+      "timestring": "2018-04-04 17:02:14"
+    },
+    {
+      "path": [],
+      "cname": "日本海浪预报下载",
+      "time": 1522496609000,
+      "error": 0,
+      "message": [
+        "2018-03-31 19:43:29,619[INFO] - imocwx_wavedownload.py:141 - 2018033114下载完成，保存在/xinhong/meteo_data/download_data/fcimg/imocwx/wave/20180331"
+      ],
+      "jpwave": [],
+      "type": "jpwave",
+      "timestring": "2018-03-31 19:43:29"
+    },
+    {
+      "path": [],
+      "cname": "GTSPP下载",
+      "error": 0,
+      "message": [],
+      "gtspp.down": [],
+      "type": "gtspp.down"
+    },
+    {
+      "path": [],
+      "cname": "WAVEWATCH3处理",
+      "wavewatch.process": [],
+      "time": 1522824437000,
+      "error": 0,
+      "message": [
+        "[xinhong][INFO][2018-04-04 14:47:17.845]net.xinhong.processandsave.process.WaveWatch3.WaveWatch3Process.romeveWaveWatch(248) 20180401的数据已从redis中删除..."
+      ],
+      "type": "wavewatch.process",
+      "timestring": "2018-04-04 14:47:17"
+    },
+    {
+      "path": [],
+      "cnsalt": [],
+      "cname": "海洋局盐度数值预报下载",
+      "time": 1522832726000,
+      "error": 0,
+      "message": [
+        "2018-04-04 17:05:26,601[INFO] - nmefc_saltdownload.py:182 - nmefc海盐图片20180403redis索引保存成功."
+      ],
+      "type": "cnsalt",
+      "timestring": "2018-04-04 17:05:26"
+    },
+    {
+      "hycom.process": [],
+      "path": [],
+      "cname": "HYCOM处理",
+      "time": 1522822669000,
+      "error": 0,
+      "message": [
+        "[xinhong][INFO][2018-04-04 14:17:49.490]net.xinhong.processandsave.process.Hycom.HycomProcess.main(184) ssh文件不处理...."
+      ],
+      "type": "hycom.process",
+      "timestring": "2018-04-04 14:17:49"
+    },
+    {
+      "path": [],
+      "cname": "GTSPP处理",
+      "time": 1522814928000,
+      "error": 0,
+      "message": [
+        "[xinhong][INFO][2018-04-04 12:08:48.966]net.xinhong.processandsave.process.gtspp.StompMessageListener.sub(51) 接收消息为:{\"id\": \"gtsppc4602380-37ac-11e8-954f-00e081d27db5\", \"type\": \"gtspp\", \"ip\": \"127.0.0.1\", \"date\": \"2018-04-04 10:06:20\", \"content\": {\"name\": \"gtspp4_rt_nc_20180325-20180331.tgz\", \"path\": \"/xinhong/meteo_data/download_data/gtspp\", \"mtime\": 1522807528.3837128, \"fsize\": 14762986}}"
+      ],
+      "type": "gtspp.process",
+      "timestring": "2018-04-04 12:08:48",
+      "gtspp.process": []
+    },
+    {
+      "path": [],
+      "testMonitor": [],
+      "time": 1522113567000,
+      "error": 0,
+      "message": [
+        "test for monitor"
+      ],
+      "type": "testMonitor",
+      "timestring": "2018-03-27 09:19:27"
+    },
+    {
+      "path": [],
+      "wavewatch.down": [],
+      "cname": "WAVEWATCH3下载",
+      "error": 0,
+      "message": [],
+      "type": "wavewatch.down"
+    },
+    {
+      "path": "/home/app/meteo_server/meteo_down_python/fcimg/nmefc_saltdownload.py",
+      "code": 0,
+      "message": [
+        "3786"
+      ],
+      "type": "cnsalt.start.exe"
+    },
+    {
+      "path": "/home/app/meteo_server/wavewatch-process/wavewatch-process.jar",
+      "code": 0,
+      "message": [
+        "5972",
+        "23987"
+      ],
+      "type": "wavewatch.process.start.exe"
+    },
+    {
+      "path": "/home/app/meteo_server/meteo_down_python/wavewatch/gwes/gwes.py",
+      "code": 0,
+      "message": [],
+      "type": "wavewatch.down.start.exe"
+    },
+    {
+      "path": "/home/app/meteo_server/meteo_down_python/fcimg/nmefc_tempdownload.py",
+      "code": 0,
+      "message": [
+        "7042"
+      ],
+      "type": "cntemp.start.exe"
+    },
+    {
+      "path": "/home/app/meteo_server/meteo_down_python/fcimg/envform.py",
+      "code": 0,
+      "message": [
+        "23022"
+      ],
+      "type": "envform.start.exe"
+    },
+    {
+      "path": "/home/app/meteo_server/hycome-process/processandsave-hycom.jar",
+      "code": 0,
+      "message": [
+        "1153"
+      ],
+      "type": "hycom.process.start.exe"
+    },
+    {
+      "path": "/home/app/meteo_server/meteo_down_python/fcimg/nmefc_winddownload.py",
+      "code": 0,
+      "message": [
+        "9788"
+      ],
+      "type": "cnwind.start.exe"
+    },
+    {
+      "path": "/home/app/meteo_server/meteo_down_python/gtspp/gtspp.py",
+      "code": 0,
+      "message": [],
+      "type": "gtspp.down.start.exe"
+    },
+    {
+      "path": "/home/app/meteo_server/meteo_down_python/fcimg/nmefc_realtime.py",
+      "code": 0,
+      "message": [
+        "32028"
+      ],
+      "type": "cnreal.start.exe"
+    },
+    {
+      "path": "/home/app/meteo_server/gtspp-process/gtspp-process.jar",
+      "code": 0,
+      "message": [
+        "9125"
+      ],
+      "type": "gtspp.process.start.exe"
+    },
+    {
+      "path": "/home/app/meteo_server/meteo_down_python/imocwx_wavedownload.py",
+      "code": 0,
+      "message": [
+        "23594"
+      ],
+      "type": "jpwave.start.exe"
+    },
+    {
+      "path": "/home/app/meteo_server/meteo_down_python/fcimg/nmefc_pre_wavedownload.py",
+      "code": 0,
+      "message": [
+        "9262"
+      ],
+      "type": "cnwave.start.exe"
+    },
+    {
+      "path": "/xinhong/meteo_data/soft/testMonitor.sh",
+      "code": 0,
+      "message": [
+        "19892"
+      ],
+      "type": "testMonitor.start.exe"
+    },
+    {
+      "path": "/home/app/meteo_server/meteo_down_python/hycom/hycomdownload20180126.py",
+      "code": 0,
+      "message": [],
+      "type": "hycom.down.start.exe"
+    },
+    {
+      "path": "/home/app/meteo_server/meteo_down_python/fcimg/nmefc_curdownload.py",
+      "code": 0,
+      "message": [
+        "486"
+      ],
+      "type": "cncur.start.exe"
+    }
+  ]
+}
+
+{
+  "delay": 92,
+  "code": 0,
+  "message": [
+    {
+      "path": [],
+      "cname": "HYCOM下载",
+      "time": 1523152404000,
+      "error": 0,
+      "message": [
+        "2018-04-08 09:53:24,993[INFO] - hycomdownload20180126.py:136 - 线程hycomThread1_201804080945文件hycom_glb_912_2018040700_t027_ts3z.nc下载速率为173KB/s,当前下载大小为:88907688，完成6.2%, 预计剩余时间130分钟"
+      ],
+      "type": "hycom.down",
+      "timestring": "2018-04-08 09:53:24",
+      "hycom.down": []
+    },
+    {
+      "path": [],
+      "cname": "GTSPP下载",
+      "time": 1521796269000,
+      "error": 0,
+      "message": [],
+      "gtspp.down": [],
+      "type": "gtspp.down",
+      "timestring": "2018-03-23 17:11:09"
+    },
+    {
+      "path": [],
+      "wavewatch.down": [],
+      "cname": "WAVEWATCH3下载",
+      "time": 1521108449000,
+      "error": 0,
+      "message": [
+        "文件下载完成"
+      ],
+      "type": "wavewatch.down",
+      "timestring": "2018-03-15 18:07:29"
+    },
+    {
+      "path": "/home/app/meteo_server/meteo_down_python/wavewatch/gwes/gwes.py",
+      "code": 0,
+      "message": [
+        "9922",
+        "27706",
+        "29216",
+        "29262",
+        "30077"
+      ],
+      "type": "wavewatch.down.start.exe"
+    },
+    {
+      "path": "/home/app/meteo_server/meteo_down_python/gtspp/gtspp.py",
+      "code": 0,
+      "message": [],
+      "type": "gtspp.down.start.exe"
+    },
+    {
+      "path": "/home/app/meteo_server/meteo_down_python/hycom/hycomdownload20180126.py",
+      "code": 0,
+      "message": [
+        "7603"
+      ],
+      "type": "hycom.down.start.exe"
+    }
+  ]
+}

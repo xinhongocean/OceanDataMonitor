@@ -2,7 +2,7 @@ package net.xinhong.oceanmonitor.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import net.xinhong.oceanmonitor.common.JSONUtil;
-import net.xinhong.oceanmonitor.service.DBservice;
+import net.xinhong.oceanmonitor.common.ResStatus;
 import net.xinhong.oceanmonitor.service.HardWareService;
 import net.xinhong.oceanmonitor.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +19,14 @@ import javax.servlet.http.HttpServletResponse;
  * Created by wingsby on 2018/3/16.
  * Created by wingsby on 2018/3/16.
  */
-//@Controller
-//@RequestMapping("/hardware")
+@Controller
+@RequestMapping("/hardware")
 public class HardWareController {
     private static final Log logger = LogFactory.getLog(HardWareController.class);
     @Autowired
     private HardWareService hService;
-//    @Autowired
-//    private RedisService rService;
+    @Autowired
+    private RedisService rService;
 //    @Autowired
 //    private DBservice dbService;
 
@@ -44,27 +44,27 @@ public class HardWareController {
         } catch (Exception e) {
             logger.error("硬件信息查询失败:" + e);
             JSONObject resJSON = new JSONObject();
-            resJSON.put("code", "400");
+            resJSON.put("code", ResStatus.SEARCH_ERROR.getStatusCode());
             JSONUtil.writeJSONToResponse(response, resJSON);
         }
     }
 
 
-//    @RequestMapping(value = "/redisinfo", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
-//    public final void getRedisInfo(HttpServletRequest request, HttpServletResponse response) {
-//        long tt = System.currentTimeMillis();
-//        try {
-//            JSONObject resJSON = rService.getInfo("");
-//            logger.debug("查询耗时:" + (System.currentTimeMillis() - tt));
-//            resJSON.put("delay", (System.currentTimeMillis() - tt));
-//            JSONUtil.writeJSONToResponse(response, resJSON);
-//        } catch (Exception e) {
-//            logger.error("REDIS信息查询失败:" + e);
-//            JSONObject resJSON = new JSONObject();
-//            resJSON.put("code", "400");
-//            JSONUtil.writeJSONToResponse(response, resJSON);
-//        }
-//    }
+    @RequestMapping(value = "/redisinfo", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+    public final void getRedisInfo(HttpServletRequest request, HttpServletResponse response) {
+        long tt = System.currentTimeMillis();
+        try {
+            JSONObject resJSON = rService.getMemeryInfo();
+            logger.debug("查询耗时:" + (System.currentTimeMillis() - tt));
+            resJSON.put("delay", (System.currentTimeMillis() - tt));
+            JSONUtil.writeJSONToResponse(response, resJSON);
+        } catch (Exception e) {
+            logger.error("REDIS信息查询失败:" + e);
+            JSONObject resJSON = new JSONObject();
+            resJSON.put("code", ResStatus.SEARCH_ERROR.getStatusCode());
+            JSONUtil.writeJSONToResponse(response, resJSON);
+        }
+    }
 
 
 }

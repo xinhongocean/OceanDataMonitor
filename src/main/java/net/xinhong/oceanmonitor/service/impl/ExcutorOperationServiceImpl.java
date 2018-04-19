@@ -29,4 +29,11 @@ public class ExcutorOperationServiceImpl implements ExcutorOperationService {
     public JSONObject status(String type) {
         return dao.status(type);
     }
+
+    @Override
+    public JSONObject query() {
+        return dao.query();
+    }
+
+
 }

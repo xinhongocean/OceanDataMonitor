@@ -19,24 +19,32 @@ import javax.annotation.Resource;
 public class RedisUtil {
     final static Logger logger = Logger.getLogger(RedisUtil.class);
     @Resource
-    private JedisCluster jedisCluster;
+    private JedisCluster oceanJedisCluster;
+    @Resource
+    private JedisCluster weatherJedisCluster;
+
     Map<String, String> redisInfo;
     Map<String, Long> redissize;
 
 
-    public Map<String, String> getRedisInfo() {
-        updateRedisInfo();
+    public Map<String, String> getRedisInfo(String machine) {
+        updateRedisInfo(machine);
         return redisInfo;
     }
 
-    public Map<String, Long> getRedisSize() {
-        updateRedisInfo();
+    public Map<String, Long> getRedisSize(String machine) {
+        updateRedisInfo(machine);
         return redissize;
     }
 
     // 获取redis 服务器信息
-    private void updateRedisInfo() {
-        Map<String, JedisPool> nodesMap = jedisCluster.getClusterNodes();
+    private void updateRedisInfo(String machine) {
+        Map<String, JedisPool> nodesMap = null;
+        if (machine.equals("107") || machine.equals("114"))
+            nodesMap = weatherJedisCluster.getClusterNodes();
+        else {
+            nodesMap = oceanJedisCluster.getClusterNodes();
+        }
         redisInfo = new HashMap<>();
         redissize = new HashMap<>();
 

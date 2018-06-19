@@ -35,9 +35,11 @@ public class HardWareController {
         String time = request.getParameter("time");
         if (time == null || time.isEmpty())
             time = "1";
+        String machine=request.getParameter("machine");
+        if(machine == null || machine.isEmpty())machine="82";
         long tt = System.currentTimeMillis();
         try {
-            JSONObject resJSON = hService.getInfo(time);
+            JSONObject resJSON = hService.getInfo(time,machine);
             logger.debug("查询耗时:" + (System.currentTimeMillis() - tt));
             resJSON.put("delay", (System.currentTimeMillis() - tt));
             JSONUtil.writeJSONToResponse(response, resJSON);
@@ -52,9 +54,11 @@ public class HardWareController {
 
     @RequestMapping(value = "/redisinfo", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
     public final void getRedisInfo(HttpServletRequest request, HttpServletResponse response) {
+        String machine=request.getParameter("machine");
+        if(machine == null || machine.isEmpty())machine="82";
         long tt = System.currentTimeMillis();
         try {
-            JSONObject resJSON = rService.getMemeryInfo();
+            JSONObject resJSON = rService.getMemeryInfo(machine);
             logger.debug("查询耗时:" + (System.currentTimeMillis() - tt));
             resJSON.put("delay", (System.currentTimeMillis() - tt));
             JSONUtil.writeJSONToResponse(response, resJSON);
@@ -65,6 +69,8 @@ public class HardWareController {
             JSONUtil.writeJSONToResponse(response, resJSON);
         }
     }
+
+
 
 
 }

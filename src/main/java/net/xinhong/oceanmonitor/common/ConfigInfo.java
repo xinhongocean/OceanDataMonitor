@@ -82,9 +82,9 @@ public class ConfigInfo {
     }
 
     public String getCHNName(String type) {
-        if(type.endsWith(".log"))type=type.replace(".log","");
-        if(type.endsWith(".data"))type=type.replace(".data","");
-        if(type.endsWith(".exe"))type=type.replace(".exe","");
+        if (type.endsWith(".log")) type = type.replace(".log", "");
+        if (type.endsWith(".data")) type = type.replace(".data", "");
+        if (type.endsWith(".exe")) type = type.replace(".exe", "");
         Set<String> keys = properties.keySet();
         for (String str : keys) {
             if (str.contains(type) && str.endsWith(".cname"))
@@ -94,55 +94,49 @@ public class ConfigInfo {
     }
 
     public List<String> getExeTypes(String machine) {
+        Map<String, String> map = getTypeMachines();
         List<String> types = new ArrayList<>();
-        if (machine == null) {
-            Set<String> keys = properties.keySet();
-            for (String str : keys) {
-                if (str.endsWith(".start.exe")&&
-                        (!str.contains("hycom.down") &&
-                                !str.contains("wavewatch.down") &&
-                                !str.contains("gtspp.down"))) {
-                    types.add(str);
-                }
-            }
-        } else {
-            Set<String> keys = properties.keySet();
-            for (String str : keys) {
-                if (str.endsWith(".start.exe")&&
-                        (str.contains("hycom.down") ||
-                                str.contains("wavewatch.down") ||
-                                str.contains("gtspp.down"))) {
-                    types.add(str);
+        Set<String> keys = properties.keySet();
+        for (String str : keys) {
+            if (str.endsWith(".start.exe")) {
+                int idx = str.lastIndexOf(".start.exe");
+                String tmp = str.substring(0, idx);
+                if (map.containsKey(tmp)) {
+                    if (map.get(tmp).equals(machine))
+                        types.add(str);
                 }
             }
         }
         return types;
     }
 
-
     public List<String> getLogTypes(String machine) {
+        Map<String, String> map = getTypeMachines();
         List<String> types = new ArrayList<>();
-        if (machine == null) {
-            Set<String> keys = properties.keySet();
-            for (String str : keys) {
-                if (str.endsWith(".log") &&
-                        (!str.contains("hycom.down") &&
-                                !str.contains("wavewatch.down") &&
-                                !str.contains("gtspp.down"))) {
-                    types.add(str);
-                }
-            }
-        } else {
-            Set<String> keys = properties.keySet();
-            for (String str : keys) {
-                if (str.endsWith(".log") &&
-                        (str.contains("hycom.down") ||
-                                str.contains("wavewatch.down") ||
-                                str.contains("gtspp.down"))) {
-                    types.add(str);
+        Set<String> keys = properties.keySet();
+        for (String str : keys) {
+            if (str.endsWith(".log")) {
+                int idx = str.lastIndexOf(".log");
+                String tmp = str.substring(0, idx);
+                if (map.containsKey(tmp)) {
+                    if (map.get(tmp).equals(machine))
+                        types.add(str);
                 }
             }
         }
         return types;
+    }
+
+    public Map<String, String> getTypeMachines() {
+        Set<String> keys = properties.keySet();
+        Map<String, String> machines = new HashMap<>();
+        for (String str : keys) {
+            if (str.endsWith("machine")) {
+                int idx = str.lastIndexOf(".machine");
+                String tmp = str.substring(0, idx);
+                machines.put(tmp, properties.get(str));
+            }
+        }
+        return machines;
     }
 }

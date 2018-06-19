@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Set;
 
 /**
  * Created by wingsby on 2018/3/16.
@@ -39,6 +40,35 @@ public class ExcutorOperationController {
     }
 
 
+
+    @RequestMapping(value = "/startall", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+    public final void startAllExe(HttpServletRequest request, HttpServletResponse response) {
+        String pwd = request.getParameter("password");
+        if(!pwd.trim().equals("82193302")){
+            return;
+        }
+        String[]types=new String[]{
+                "envform.start.exe","jpwave.start.exe","cncur.start.exe","cnwind.start.exe",
+                "cntemp.start.exe","cnwave.start.exe","cnsalt.start.exe","cnreal.start.exe",
+                "hycom.down.start.exe","wavewatch.down.start.exe","gtspp.down.start.exe",
+                "hycom.process.start.exe","wavewatch.process.start.exe","gtspp.process.start.exe"
+        };
+
+        try {
+            for(String type:types) {
+                JSONObject resJSON = service.start(type);
+//                logger.debug("启动耗时:" + (System.currentTimeMillis() - tt));
+//                resJSON.put("delay", (System.currentTimeMillis() - tt));
+                resJSON.put("code", ResStatus.SUCCESSFUL.getStatusCode());
+                JSONUtil.writeJSONToResponse(response, resJSON);
+            }
+        } catch (Exception e) {
+            logger.error("启动失败:" + e);
+            JSONObject resJSON = new JSONObject();
+            resJSON.put("code", ResStatus.SEARCH_ERROR.getStatusCode());
+            JSONUtil.writeJSONToResponse(response, resJSON);
+        }
+    }
 
 
     @RequestMapping(value = "/start", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")

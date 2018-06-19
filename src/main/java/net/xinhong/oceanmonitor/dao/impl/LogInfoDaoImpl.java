@@ -8,6 +8,8 @@ import net.xinhong.oceanmonitor.dao.ExcutorOperationDao;
 import net.xinhong.oceanmonitor.dao.LogInfoDao;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -38,7 +40,7 @@ public class LogInfoDaoImpl implements LogInfoDao {
 ////            +pwd.toLowerCase()+"\"";
 //            cmd+="|grep " + pwd.toUpperCase();
 //        }
-        if(pwd!=null&&pwd.length()>0) {
+        if (pwd != null && pwd.length() > 0) {
             String relative = LogInfoDaoImpl.class.getClassLoader().
                     getResource("").getPath();
             String shpath = relative + "/log.sh";
@@ -51,7 +53,7 @@ public class LogInfoDaoImpl implements LogInfoDao {
             JSONArray array = new JSONArray();
             array.addAll(resStr);
             resJson.put(type, array);
-            resJson.put("message",array);
+            resJson.put("message", array);
             resJson.put("type", type);
             resJson.put("path", path);
             resJson.put("cname", cname);
@@ -67,29 +69,28 @@ public class LogInfoDaoImpl implements LogInfoDao {
     }
 
 
-
     public JSONObject errorInfo(String type) {
         String path = info.getLogPath(type);
         String cname = info.getCHNName(type);
-        String relative=LogInfoDaoImpl.class.getClassLoader().
+        String relative = LogInfoDaoImpl.class.getClassLoader().
                 getResource("").getPath();
-        String shpath=relative+"/log.sh";
+        String shpath = relative + "/log.sh";
 //        String cmd = "tail -n 1000 " + path+" grep -E \"ERROR|error\" ";
-        String cmd="sh "+shpath+" 1000 "+path+" ERROR";
+        String cmd = "sh " + shpath + " 1000 " + path + " ERROR";
         JSONObject resJson = new JSONObject();
         JSONArray array = new JSONArray();
         try {
             List<String> resStr = LinuxCommander.getCMDMessage(cmd);
-            if(resStr!=null&&resStr.size()>0){
+            if (resStr != null && resStr.size() > 0) {
                 array.addAll(resStr);
                 resJson.put("error", 1);
-            }else{
+            } else {
                 cmd = "tail -n 1 " + path;
                 List<String> logstr = LinuxCommander.getCMDMessage(cmd);
                 array.addAll(logstr);
                 resJson.put("error", 0);
             }
-            resJson.put("message",array);
+            resJson.put("message", array);
             resJson.put(type, path);
             resJson.put("type", type);
             resJson.put("path", resStr);
@@ -111,12 +112,13 @@ public class LogInfoDaoImpl implements LogInfoDao {
         String path = info.getDataPath(type);
         String cname = info.getCHNName(type);
         logger.error(path);
-        String date = year + month + day;
-        if (type.contains("hycom.down") || type.contains("wavewatch.down")) {
-            String[] strs = path.split("@");
-            if (strs.length == 2) {
-                path = strs[0] + date;
-            }
+        if (path.contains("@")) {
+            List<Integer> idxes = searchAllIndex(path, "@");
+            String format = path.substring(idxes.get(0) + 1, idxes.get(1));
+            String replace = path.substring(idxes.get(0), idxes.get(1) + 1);
+            DateTime dateTime = new DateTime(Integer.valueOf(year),
+                    Integer.valueOf(month), Integer.valueOf(day), 0, 0);
+            path = path.replace(replace, dateTime.toString(format));
         }
 //        String cmd="find "+path +" -type f|wc -l";
 //        String cmd = "ls -l " + path; //+ "| awk '{print $9,$5}'";
@@ -156,27 +158,42 @@ public class LogInfoDaoImpl implements LogInfoDao {
     public JSONObject firstQuery(String machine) {
         List<String> types = info.getLogTypes(machine);
         JSONObject resJson = new JSONObject();
-        JSONArray array = new JSONArray();
+        JSONArray logArray = new JSONArray();
         try {
             for (String str : types) {
                 JSONObject obj =
-                        errorInfo(str.replace(".log",""));
-                array.add(obj);
+                        errorInfo(str.replace(".log", ""));
+                logArray.add(obj);
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
+        resJson.put("log", logArray);
+
+        JSONArray exeArray = new JSONArray();
         try {
             List<String> etypes = info.getExeTypes(machine);
             for (String str : etypes) {
-                array.add(edao.status(str));
+                exeArray.add(edao.status(str));
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-        resJson.put("message", array);
+        resJson.put("exe", exeArray);
         return resJson;
     }
 
+
+    private List<Integer> searchAllIndex(String str, String key) {
+        List<Integer> idxes = new ArrayList<>();
+        int a = str.indexOf(key);//*第一个出现的索引位置
+        idxes.add(a);
+        while (a != -1) {
+            a = str.indexOf(key, a + 1);
+            //*从这个索引往后开始第一个出现的位置
+            idxes.add(a);
+        }
+        return idxes;
+    }
 
 }

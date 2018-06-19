@@ -21,12 +21,12 @@ public class RedisService {
 
 
     //获取当前redis使用内存大小情况
-    public JSONObject getMemeryInfo() {
-        Map<String, String> clusterinfo = redisUtil.getRedisInfo();
+    public JSONObject getMemeryInfo(String machine) {
+        Map<String, String> clusterinfo = redisUtil.getRedisInfo(machine);
 //        Map<String, Long> nodeSize = redisUtil.getRedisSize();
         JSONObject resJson = new JSONObject();
         List<JSONObject>jsonObjectList=new ArrayList<>();
-        JSONArray array=new JSONArray();
+
         for (String node : clusterinfo.keySet()) {
             JSONObject nodeJson = new JSONObject();
             if(clusterinfo.get(node).equals("fail")){
@@ -60,11 +60,15 @@ public class RedisService {
         jsonObjectList.sort(new Comparator<JSONObject>() {
             @Override
             public int compare(JSONObject o1, JSONObject o2) {
+                if(o1.get("port")==null)return -1;
+                if(o2.get("port")==null)return 1;
                 if((Integer)o1.get("port")>(Integer)o2.get("port")){
                     return 1;
                 }else return -1;
             }
         });
+
+        JSONArray array=new JSONArray();
         array.addAll(jsonObjectList);
         resJson.put("nodes",array);
         return resJson;

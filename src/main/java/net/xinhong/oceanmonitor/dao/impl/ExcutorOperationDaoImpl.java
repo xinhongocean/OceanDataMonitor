@@ -137,6 +137,7 @@ public class ExcutorOperationDaoImpl implements ExcutorOperationDao {
 //        return true;
 //    }
 
+    //todo 新增类型的处理
     public static int getIndentify(String type) {
         if (type.contains("testMonitor")) return -1;
         String[] array0 = ("envform.start.exe,jpwave.start.exe,cncur.start.exe,cnwind.start.exe," +
@@ -144,7 +145,8 @@ public class ExcutorOperationDaoImpl implements ExcutorOperationDao {
                 "hycom.down.start.exe").split(",");
         //crontab
         String[] array1 = "wavewatch.down.start.exe,gtspp.down.start.exe".split(",");
-        String[] array2 = "hycom.process.start.exe,wavewatch.process.start.exe,gtspp.process.start.exe".split(",");
+        String[] array2 = ("hycom.process.start.exe,wavewatch.process.start.exe," +
+                "gtspp.process.start.exe,gfs.down.start.exe,jsyb.start.exe").split(",");
         for (String str : array0) {
             if (str.equals(type)) return 0;
         }

@@ -13,7 +13,7 @@ public class HardWareServiceImpl implements HardWareService {
     @Autowired
     private HardWareDAO dao;
     @Override
-    public JSONObject getInfo(String time) {
-        return dao.getInfo(time);
+    public JSONObject getInfo(String time,String machine) {
+        return dao.getInfo(time,machine);
     }
 }

@@ -17,7 +17,7 @@ public class HardWareDaoImpl implements HardWareDAO {
     Logger logger=Logger.getLogger(HardWareDaoImpl.class);
 
     @Override
-    public JSONObject getInfo(String time) {
+    public JSONObject getInfo(String time,String machine) {
         List<String> resStr =new ArrayList<>();
         String relative=LogInfoDaoImpl.class.getClassLoader().
                 getResource("").getPath();
@@ -28,7 +28,7 @@ public class HardWareDaoImpl implements HardWareDAO {
         try {
             resJson.put("harddisk", resStr.get(line-3));
             resJson.put("loadavg", resStr.get(line-2));
-            logger.error(resStr.get(line-1));
+//            logger.info(resStr.get(line-1));
             if(resStr.get(line-1).matches("\\d+?"))
                 resJson.put("cpu", 100-Integer.valueOf(resStr.get(line-1)));
         } catch (Exception e) {

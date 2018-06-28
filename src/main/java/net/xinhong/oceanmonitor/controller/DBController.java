@@ -2,18 +2,15 @@ package net.xinhong.oceanmonitor.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import net.xinhong.oceanmonitor.common.DBAccess;
-import net.xinhong.oceanmonitor.common.JSONUtil;
+import net.xinhong.oceanmonitor.common.tools.JSONUtil;
 import net.xinhong.oceanmonitor.common.ResStatus;
-import net.xinhong.oceanmonitor.service.LogInfoService;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * Created by zxf on 2018/3/26.

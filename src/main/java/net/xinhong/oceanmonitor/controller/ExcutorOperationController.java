@@ -1,7 +1,7 @@
 package net.xinhong.oceanmonitor.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import net.xinhong.oceanmonitor.common.JSONUtil;
+import net.xinhong.oceanmonitor.common.tools.JSONUtil;
 import net.xinhong.oceanmonitor.common.ResStatus;
 import net.xinhong.oceanmonitor.service.ExcutorOperationService;
 import org.apache.log4j.Logger;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Set;
 
 /**
  * Created by wingsby on 2018/3/16.

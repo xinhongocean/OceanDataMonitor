@@ -2,13 +2,10 @@ package net.xinhong.oceanmonitor.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import net.xinhong.oceanmonitor.common.ConfigInfo;
-import net.xinhong.oceanmonitor.common.JSONUtil;
+import net.xinhong.oceanmonitor.common.tools.JSONUtil;
 import net.xinhong.oceanmonitor.common.ResStatus;
 import net.xinhong.oceanmonitor.common.StringUtils;
-import net.xinhong.oceanmonitor.service.HardWareService;
 import net.xinhong.oceanmonitor.service.LogInfoService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;

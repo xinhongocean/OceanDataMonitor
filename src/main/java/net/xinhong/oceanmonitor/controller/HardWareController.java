@@ -1,7 +1,7 @@
 package net.xinhong.oceanmonitor.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import net.xinhong.oceanmonitor.common.JSONUtil;
+import net.xinhong.oceanmonitor.common.tools.JSONUtil;
 import net.xinhong.oceanmonitor.common.ResStatus;
 import net.xinhong.oceanmonitor.service.HardWareService;
 import net.xinhong.oceanmonitor.service.RedisService;

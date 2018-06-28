@@ -1,4 +1,4 @@
-package net.xinhong.oceanmonitor.common;
+package net.xinhong.oceanmonitor.common.tools;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;

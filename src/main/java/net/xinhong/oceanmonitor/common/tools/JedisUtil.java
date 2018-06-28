@@ -1,4 +1,4 @@
-package net.xinhong.oceanmonitor.common;
+package net.xinhong.oceanmonitor.common.tools;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

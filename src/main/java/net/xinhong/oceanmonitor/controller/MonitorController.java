@@ -1,8 +1,13 @@
 package net.xinhong.oceanmonitor.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import net.xinhong.oceanmonitor.common.tools.JSONUtil;
+import net.xinhong.oceanmonitor.common.GFSTimeManger;
+import net.xinhong.oceanmonitor.common.JSONUtil;
 import net.xinhong.oceanmonitor.common.ResStatus;
+import net.xinhong.oceanmonitor.common.TimeMangerJob;
+import net.xinhong.oceanmonitor.service.RedisKeyService;
+import net.xinhong.oceanmonitor.service.impl.MonitorChain_Factory;
+import net.xinhong.oceanmonitor.service.impl.MonitorChain_Process;
 import net.xinhong.oceanmonitor.service.impl.MonitorInfoServiceImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,11 +30,28 @@ public class MonitorController {
 
     @Autowired
     MonitorInfoServiceImpl monitorInfoService;
-    @RequestMapping(value = "/GFS" , method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+//    @RequestMapping(value = "/GFS" , method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+//    public final void getGFSMonitor(HttpServletRequest request, HttpServletResponse response){
+//        try {
+//            JSONObject resJSON = monitorInfoService.getInfo("GFS");
+//            JSONUtil.writeJSONToResponse(response, resJSON);
+//        }catch (Exception e){
+//            logger.error("硬件信息查询失败:" + e);
+//            JSONObject resJSON = new JSONObject();
+//            resJSON.put("code", ResStatus.SEARCH_ERROR.getStatusCode());
+//            JSONUtil.writeJSONToResponse(response, resJSON);
+//        }
+//    }
+
+    @RequestMapping(value = "/monitor" , method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
     public final void getGFSMonitor(HttpServletRequest request, HttpServletResponse response){
         try {
-            JSONObject resJSON = monitorInfoService.getInfo("GFS");
-            JSONUtil.writeJSONToResponse(response, resJSON);
+            String type=request.getParameter("type");
+
+            MonitorChain_Process process = MonitorChain_Process.getInstance();
+            process.setMonitorChain(MonitorChain_Factory.createMonitorChainElement());
+            JSONObject jsonObject = process.deal(type);
+            JSONUtil.writeJSONToResponse(response, jsonObject);
         }catch (Exception e){
             logger.error("硬件信息查询失败:" + e);
             JSONObject resJSON = new JSONObject();

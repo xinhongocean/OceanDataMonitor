@@ -112,16 +112,22 @@
         </dependency>
 
 
-        <dependency>
-            <groupId>wingsby</groupId>
-            <artifactId>ojdbc14</artifactId>
-            <version>10.2</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>wingsby</groupId>-->
+            <!--<artifactId>ojdbc14</artifactId>-->
+            <!--<version>10.2</version>-->
+        <!--</dependency>-->
 
         <!--<dependency>-->
             <!--<groupId>com.oracle</groupId>-->
             <!--<artifactId>ojdbc6</artifactId>-->
             <!--<version>11.2.0.3</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>ojdbc</groupId>-->
+            <!--<artifactId>ojdbc</artifactId>-->
+            <!--<version>14</version>-->
         <!--</dependency>-->
 
         <!--spring-->
@@ -238,6 +244,28 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.46</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-jms_1.1_spec</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.qpid</groupId>
+            <artifactId>qpid-amqp-1-0-client-jms</artifactId>
+            <version>0.26</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.oodt</groupId>
+            <artifactId>opendapps</artifactId>
+            <version>0.9</version>
         </dependency>
 
 

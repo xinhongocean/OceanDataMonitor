@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 public abstract class MonitorChain {
 
     //监控责任链,当监控结果有问题时,提交至下一环,正常时返回正常
+    //目的是为了找出错误开始的一环：结果端判断，如果成功，则返回；如果不成功，则提交至下一环
     private MonitorChain next=null;
 
 
@@ -16,7 +17,7 @@ public abstract class MonitorChain {
         this.next = next;
     }
 
-    public abstract boolean isOk(String type);
+    public abstract boolean isOk(String type);      //满足条件，返回
 
     public abstract String getErrInfo(String type);
 
@@ -27,6 +28,7 @@ public abstract class MonitorChain {
         } else {
             //错误信息
             String errinfo=getErrInfo(type);
+            object.put(getClass().getName(),errinfo);
             if(next!=null)
                 return next.handleMonitor(type, object);
             else{
@@ -36,6 +38,5 @@ public abstract class MonitorChain {
             }
         }
     }
-
 
 }

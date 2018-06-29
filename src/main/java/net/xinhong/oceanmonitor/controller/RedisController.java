@@ -2,11 +2,12 @@ package net.xinhong.oceanmonitor.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import net.xinhong.oceanmonitor.common.GFSTimeManger;
-import net.xinhong.oceanmonitor.common.tools.JSONUtil;
+import net.xinhong.oceanmonitor.common.JSONUtil;
 import net.xinhong.oceanmonitor.common.ResStatus;
 import net.xinhong.oceanmonitor.service.impl.RedisKeyServiceImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,8 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 public class RedisController {
     private static final Log logger = LogFactory.getLog(MonitorController.class);
     private static RedisKeyServiceImpl timeMangerJob = new RedisKeyServiceImpl();
-//    @Autowired
-//    RedisKeyServiceImpl timeMangerJob;
     //redis监控
     static {
         GFSTimeManger manger =

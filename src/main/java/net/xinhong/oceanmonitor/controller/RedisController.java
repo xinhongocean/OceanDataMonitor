@@ -32,11 +32,12 @@ public class RedisController {
     @RequestMapping(value = "/redis", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json;charset=UTF-8")
     public final void getRedisMonitor(HttpServletRequest request, HttpServletResponse response) {
-        String date=request.getParameter("date");
-        String redisDataRate = Float.toString(timeMangerJob.checkKeys(date)) + "%";
+        String type=request.getParameter("type");
+        String redisDataRate = Float.toString(timeMangerJob.checkKeys(type)) + "%";
         String redisTime = timeMangerJob.getDate();     //先获取数据，后获取日期
         try {
             JSONObject resJSON = new JSONObject();
+            resJSON.put("type" , type);
             resJSON.put("time" , redisTime);
             resJSON.put("dataRate",redisDataRate);
             JSONUtil.writeJSONToResponse(response, resJSON);

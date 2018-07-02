@@ -1,7 +1,9 @@
 package net.xinhong.oceanmonitor.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import net.xinhong.oceanmonitor.common.DecimalFormats;
 import net.xinhong.oceanmonitor.common.JedisUtil;
+import net.xinhong.oceanmonitor.common.PropertyUtil;
 import net.xinhong.oceanmonitor.common.TimeMangerJob;
 import net.xinhong.oceanmonitor.service.RedisKeyService;
 import org.slf4j.Logger;
@@ -16,25 +18,35 @@ import java.util.Calendar;
 
 /**
  * Created by Administrator on 2018/6/22.
+ * redis的监控：针对固定的key定时查询
+ *
  */
 @Service
 public class RedisKeyServiceImpl implements RedisKeyService , TimeMangerJob ,Serializable {
     private  final Logger logger = LoggerFactory.getLogger(RedisKeyServiceImpl.class);
-
+    private JSONObject json = new JSONObject();
     public RedisKeyServiceImpl() {
+        PropertyUtil.loadProps("monitorConf/redisKey.properties");
     }
 
     private JedisCluster redis = null;
-    private int lossNum;
-    private float dataRate;
-    private String date;
+    private int lossNum;                    //丢失数据
+    private float dataRate;                 //数据比率
+    private String date;                    //日期
+    private String type;                    //数据类型（例如GFS等）
     private String result_common;
     private String result_JSYB;
     private String result_isoline;
     private String result_isosurface;
+
+    /**
+     * 功能：            数据类型查询：类型是“”时，表示遍历
+     * @param type      数据类型：例如：GFS，具体查阅《Redis 缓存数据格式说明》
+     * @return  float   表示数据有效率
+     */
     @Override
-    public float checkKeys() {
-        // TODO: 2018/6/22 加入所有的key
+    public float checkKeys(String type) {
+        if (!json.isEmpty())json.clear();
         try {
             redis = JedisUtil.connRedis();
             SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhh");
@@ -42,12 +54,12 @@ public class RedisKeyServiceImpl implements RedisKeyService , TimeMangerJob ,Ser
             date = format.format( Calendar.getInstance().getTime());
             lossNum = 0;
             for (int i = 0; i < 73; i++) {
-                simpleCheck(date ,i);
+                simpleCheck(date ,i , type);
             }
             for (int i = 75; i < 97; i+=3) {
-                simpleCheck(date ,i);
+                simpleCheck(date ,i ,type);
             }
-            dataRate = (float)(81*4-lossNum)/(81*4);
+            dataRate = (float)(81*4-lossNum) / (81*4) * 100;
         }catch (Exception e){
             logger.error(e.toString());
         }finally {
@@ -59,12 +71,17 @@ public class RedisKeyServiceImpl implements RedisKeyService , TimeMangerJob ,Ser
                 }
             }
         }
-
         return dataRate;
     }
+
+    /**
+     * @param date_in   日期：yyyyMMddhh
+     * @param type      数据类型，例如：GFS
+     * @return  float   表示数据有效率
+     */
     //手动查询查询
-    public float checkKeys(String date_in) {
-        // TODO: 2018/6/22 加入所有的key
+    public float checkKeys(String date_in ,String type) {
+        if (!json.isEmpty())json.clear();
         try {
             redis = JedisUtil.connRedis();
             SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhh");
@@ -72,12 +89,12 @@ public class RedisKeyServiceImpl implements RedisKeyService , TimeMangerJob ,Ser
                     format.format( Calendar.getInstance().getTime());
             lossNum = 0;
             for (int i = 0; i < 73; i++) {
-                simpleCheck(date ,i);
+                simpleCheck(date ,i ,type);
             }
             for (int i = 75; i < 97; i+=3) {
-                simpleCheck(date ,i);
+                simpleCheck(date ,i , type);
             }
-            dataRate = (float)(81*4-lossNum)/(81*4);
+            dataRate = (float)(81*4-lossNum)/(81*4) * 100;
         }catch (Exception e){
             logger.error(e.toString());
         }finally {
@@ -89,28 +106,51 @@ public class RedisKeyServiceImpl implements RedisKeyService , TimeMangerJob ,Ser
                 }
             }
         }
-
         return dataRate;
     }
-    private void simpleCheck(String date , int i){
-        result_common = redis.hget("xhgfs:fc:point:"+date+DecimalFormats.decimalFormat000.format(i) , "82.00_99.00");
-        result_JSYB = redis.hget("xhgfs:fc:point:sigmet:"+date+DecimalFormats.decimalFormat000.format(i) , "43.50_-91.50");
-        result_isoline = redis.hget("xhgfs:fc:isoline:"+date+DecimalFormats.decimalFormat000.format(i) , "005_TT_0925_EN");
-        result_isosurface = redis.hget("xhgfs:fc:isosurface:"+date+DecimalFormats.decimalFormat000.format(i) , "049_TURB_0850_EN");
-        if (result_common == null || result_common.isEmpty())lossNum++;
-        if (result_JSYB == null || result_JSYB.isEmpty())lossNum++;
-        if (result_isoline == null || result_isoline.isEmpty())lossNum++;
-        if (result_isosurface == null || result_isosurface.isEmpty())lossNum++;
+    private void simpleCheck(String date , int i ,String type) {
+        //// TODO: 2018/7/2 针对不同的数据源，用条件判断下；针对手动和自动，用type是否为空判断
+        if(type.isEmpty())simpleCheck_all(date , i);                    //针对自动check，遍历all
+
+        simpleCheck_GFS(date , i );                             //redis_gfs
+
+    }
+    //redis_gfs
+    private void simpleCheck_GFS(String date , int i){
+        String result_common_temp = PropertyUtil.getProperty("GFS_result_common_head") + date + DecimalFormats.decimalFormat000.format(i);
+        String result_JSYB_temp = PropertyUtil.getProperty("GFS_result_JSYB_head") + date + DecimalFormats.decimalFormat000.format(i);
+        String result_isoline_temp = PropertyUtil.getProperty("GFS_result_isoline_head") + date + DecimalFormats.decimalFormat000.format(i);
+        String result_isosurface_temp = PropertyUtil.getProperty("GFS_result_isosurface_head") + date + DecimalFormats.decimalFormat000.format(i);
+        result_common = redis.hget(result_common_temp, PropertyUtil.getProperty("GFS_result_common_point"));
+        result_JSYB = redis.hget(result_JSYB_temp, PropertyUtil.getProperty("GFS_result_JSYB_point"));
+        result_isoline = redis.hget(result_isoline_temp, PropertyUtil.getProperty("GFS_result_isoline_point"));
+        result_isosurface = redis.hget(result_isosurface_temp, PropertyUtil.getProperty("GFS_result_isosurface_point"));
+        if (result_common == null || result_common.isEmpty()) {
+            lossNum++;
+            json.put("GFS" + "----" + result_common_temp, 0);
+        }
+        if (result_JSYB == null || result_JSYB.isEmpty()) {
+            lossNum++;
+            json.put("GFS" + "----" + result_JSYB_temp , 0);
+        }
+        if (result_isoline == null || result_isoline.isEmpty()) {
+            lossNum++;
+            json.put("GFS" + "----" + result_isoline_temp , 0);
+        }
+        if (result_isosurface == null || result_isosurface.isEmpty()) {
+            lossNum++;
+            json.put("GFS" + "----" + result_isosurface_temp , 0);
+        }
         //清空
         result_common = null;
         result_JSYB = null;
         result_isoline = null;
         result_isosurface = null;
     }
-
-    @Override
-    public void doJob() {
-        checkKeys();
+    //针对自动check，遍历all
+    private void simpleCheck_all(String date , int i){
+        // TODO: 2018/7/2 add方法
+        simpleCheck_GFS(date , i);
     }
 
     public int getLossNum() {
@@ -179,5 +219,10 @@ public class RedisKeyServiceImpl implements RedisKeyService , TimeMangerJob ,Ser
 
     public void setResult_isosurface(String result_isosurface) {
         this.result_isosurface = result_isosurface;
+    }
+
+    @Override
+    public void doJob() {
+        checkKeys("");      //针对定时执行
     }
 }

@@ -9,8 +9,9 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * Desc:properties文件获取工具类
+ * Desc:properties文件获取工具类：使用：直接loadProps（road）
  * Created by hafiz.zhang on 2016/9/15.
+ *
  */
 public class PropertyUtil {
     private static final Logger logger = LoggerFactory.getLogger(PropertyUtil.class);

@@ -13,12 +13,22 @@
 		<property name="maxIdle" value="10"/>
 	</bean>
 
-	<bean id="jedisCluster" class="net.xinhong.oceanmonitor.redis.JedisClusterFactory">
+	<bean id="oceanJedisCluster" class="net.xinhong.oceanmonitor.redis.JedisClusterFactory">
 		<property name="addressConfig">
-			<value>classpath:redis.properties</value>
+			<value>classpath:oceanRedis.properties</value>
 		</property>
 		<property name="addressKeyPrefix" value="address" />   <!--  属性文件里  key的前缀 -->
 
+		<property name="timeout" value="8000" />
+		<property name="maxRedirections" value="8" />
+		<property name="genericObjectPoolConfig" ref="genericObjectPoolConfig" />
+	</bean>
+
+	<bean id="weatherJedisCluster" class="net.xinhong.oceanmonitor.redis.JedisClusterFactory">
+		<property name="addressConfig">
+			<value>classpath:weatherRedis.properties</value>
+		</property>
+		<property name="addressKeyPrefix" value="address" />   <!--  属性文件里  key的前缀 -->
 		<property name="timeout" value="8000" />
 		<property name="maxRedirections" value="8" />
 		<property name="genericObjectPoolConfig" ref="genericObjectPoolConfig" />

@@ -41,7 +41,7 @@
     <context:component-scan base-package="net.xinhong.oceanmonitor"/>
 
     <!-- 导入关联配置 -->
-    <import resource="classpath:spring/spring-config-database-dbcp.xml"/>
+    <!--<import resource="classpath:spring/spring-config-database-dbcp.xml"/>-->
     <import resource="classpath:spring/spring-config-redis.xml"/>
 
 </beans>

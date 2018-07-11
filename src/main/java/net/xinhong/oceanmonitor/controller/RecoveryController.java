@@ -29,30 +29,32 @@ public class RecoveryController {
     public JSONObject resendMessages(HttpServletRequest request) {
         JSONObject jsonObject = new JSONObject();
         String token = request.getParameter("token");
-        if (token == null) {
+        if (token == null || (token != null && token.contains("xhgk"))) {
             jsonObject.put("code", "303");
             return jsonObject;
         }
         String strHour = request.getParameter("hours");
         String type = request.getParameter("type");
         String minusHour = request.getParameter("minushour");
+        String runtime = request.getParameter("runtime");
         if (minusHour == null || (minusHour != null && !minusHour.matches("\\d+"))) minusHour = "0";
         String[] vtis = null;
-        String runtime = null;
+//        String runtime = null;
         if (type == null) type = "gfs.down";
+        String datetime = null;
+        if (runtime == null) {
+            datetime = NumModelTimeUtils.getDateTimeVTI(DateTime.now(), Integer.valueOf(minusHour), type);
+            if (datetime != null && datetime.length() == 13) runtime = datetime.substring(0, 10);
+        }
+
         if (strHour != null)
             vtis = strHour.split(",");
         else {
             // 最近6个小时
-            String datetime = NumModelTimeUtils.getDateTimeVTI(DateTime.now(), Integer.valueOf(minusHour), type);
-            if (datetime != null && datetime.length() == 13) {
-                runtime = datetime.substring(0, 10);
-                int vti = Integer.valueOf(datetime.substring(10));
-                vtis = new String[6];
-                for (int i = 0; i < 6; i++)
-                    vtis[i] = String.format("%03d", i+vti);
-            }
-
+            int vti = Integer.valueOf(datetime.substring(10));
+            vtis = new String[6];
+            for (int i = 0; i < 6; i++)
+                vtis[i] = String.format("%03d", i + vti);
         }
         jsonObject = service.resendMessages(type, runtime, vtis);
         return jsonObject;

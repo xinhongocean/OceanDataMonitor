@@ -49,23 +49,22 @@ public class RedisUtil {
         redissize = new HashMap<>();
 
         for (String str : nodesMap.keySet()) {
+            JedisPool jedisPool =null;
+            Jedis jedis=null;
             try {
-                JedisPool jedisPool = nodesMap.get(str);
-                Jedis jedis = jedisPool.getResource();
+                jedisPool = nodesMap.get(str);
+                jedis = jedisPool.getResource();
                 Client client = jedis.getClient();
                 client.info();
-//                try {
-////                    List<Long> sz=client.getIntegerMultiBulkReply();
-////                    Long size = client.getIntegerReply();
-////                    redissize.put(str, size);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
                 String info = client.getBulkReply();
                 redisInfo.put(str, info);
             } catch (Exception e) {
                 logger.error(e.getMessage());
+                if(jedisPool!=null&&jedis!=null)
+                    jedisPool.returnBrokenResource(jedis);
                 redisInfo.put(str, "fail");
+            }finally {
+                jedisPool.close();
             }
         }
     }

@@ -13,18 +13,20 @@ public class MonitorChain_Redis extends MonitorChain {
     public MonitorChain_Redis() {
     }
 
-    @Autowired
-    RedisKeyService redisKeyService;
+//    @Autowired
+    RedisKeyServiceImpl redisKeyService = new RedisKeyServiceImpl();
     @Override
     public boolean isOk(String type) {
-//        return  true;
         float dataRate =redisKeyService.checkKeys(type);    //自动查询
-        return (dataRate>0.95)? true:false;
+        System.out.println("redis"+(dataRate));
+        return (dataRate>24)? true:false;
+//        System.out.println("redis  " +false);
+//        return false;
     }
 
     @Override
     public String getErrInfo(String type) {
-        return "error:redis";
-//        return "Type:"+type+"  Model:RedisKeyService"+"  Body:"+redisKeyService.getJson();
+//        return "error:redis";
+        return "Type:"+type+"  Model:RedisKeyService"+"  Body:"+redisKeyService.getJson();
     }
 }

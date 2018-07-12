@@ -5,7 +5,9 @@ import net.xinhong.oceanmonitor.common.DecimalFormats;
 import net.xinhong.oceanmonitor.common.JedisUtil;
 import net.xinhong.oceanmonitor.common.PropertyUtil;
 import net.xinhong.oceanmonitor.common.TimeMangerJob;
+import net.xinhong.oceanmonitor.common.tools.NumModelTimeUtils;
 import net.xinhong.oceanmonitor.service.RedisKeyService;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ public class RedisKeyServiceImpl implements RedisKeyService , TimeMangerJob ,Ser
     private  final Logger logger = LoggerFactory.getLogger(RedisKeyServiceImpl.class);
     private JSONObject json = new JSONObject();
     public RedisKeyServiceImpl() {
-        PropertyUtil.loadProps("monitorConf/redisKey.properties");
+//        PropertyUtil.loadProps("monitorConf/redisKey.properties");
     }
 
     private JedisCluster redis = null;
@@ -49,9 +51,8 @@ public class RedisKeyServiceImpl implements RedisKeyService , TimeMangerJob ,Ser
         if (!json.isEmpty())json.clear();
         try {
             redis = JedisUtil.connRedis();
-            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhh");
             //GFS:0-72小时为逐小时，72-96小时间隔3小时，VTI长度为3位,81个
-            date = format.format( Calendar.getInstance().getTime());
+            date = NumModelTimeUtils.getGFSDateTime(new DateTime() ,0);  //todo 只检测当前时间对应的一个起报
             lossNum = 0;
             for (int i = 0; i < 73; i++) {
                 simpleCheck(date ,i , type);
@@ -84,7 +85,7 @@ public class RedisKeyServiceImpl implements RedisKeyService , TimeMangerJob ,Ser
         if (!json.isEmpty())json.clear();
         try {
             redis = JedisUtil.connRedis();
-            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhh");
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHH");
             date = (date_in !=null && date_in.matches("[0-9]{10}"))? date_in :
                     format.format( Calendar.getInstance().getTime());
             lossNum = 0;
@@ -94,7 +95,7 @@ public class RedisKeyServiceImpl implements RedisKeyService , TimeMangerJob ,Ser
             for (int i = 75; i < 97; i+=3) {
                 simpleCheck(date ,i , type);
             }
-            dataRate = (float)(81*4-lossNum)/(81*4) * 100;
+            dataRate = (float)(81-lossNum)/(81) * 100;
         }catch (Exception e){
             logger.error(e.toString());
         }finally {
@@ -110,10 +111,11 @@ public class RedisKeyServiceImpl implements RedisKeyService , TimeMangerJob ,Ser
     }
     private void simpleCheck(String date , int i ,String type) {
         //// TODO: 2018/7/2 针对不同的数据源，用条件判断下；针对手动和自动，用type是否为空判断
-        if(type.isEmpty())simpleCheck_all(date , i);                    //针对自动check，遍历all
-
-        simpleCheck_GFS(date , i );                             //redis_gfs
-
+        if(type.isEmpty()) {
+            simpleCheck_all(date, i);                    //针对自动check，遍历all
+        }else {
+            simpleCheck_GFS(date , i );                             //redis_gfs
+        }
     }
     //redis_gfs
     private void simpleCheck_GFS(String date , int i){
@@ -129,18 +131,19 @@ public class RedisKeyServiceImpl implements RedisKeyService , TimeMangerJob ,Ser
             lossNum++;
             json.put("GFS" + "----" + result_common_temp, 0);
         }
-        if (result_JSYB == null || result_JSYB.isEmpty()) {
-            lossNum++;
-            json.put("GFS" + "----" + result_JSYB_temp , 0);
-        }
-        if (result_isoline == null || result_isoline.isEmpty()) {
-            lossNum++;
-            json.put("GFS" + "----" + result_isoline_temp , 0);
-        }
-        if (result_isosurface == null || result_isosurface.isEmpty()) {
-            lossNum++;
-            json.put("GFS" + "----" + result_isosurface_temp , 0);
-        }
+        // TODO: 2018/7/11 redis里gfs的其他产品,比如sigmet,isoline,isosurface等 
+//        if (result_JSYB == null || result_JSYB.isEmpty()) {
+//            lossNum++;
+//            json.put("GFS" + "----" + result_JSYB_temp , 0);
+//        }
+//        if (result_isoline == null || result_isoline.isEmpty()) {
+//            lossNum++;
+//            json.put("GFS" + "----" + result_isoline_temp , 0);
+//        }
+//        if (result_isosurface == null || result_isosurface.isEmpty()) {
+//            lossNum++;
+//            json.put("GFS" + "----" + result_isosurface_temp , 0);
+//        }
         //清空
         result_common = null;
         result_JSYB = null;
@@ -219,6 +222,10 @@ public class RedisKeyServiceImpl implements RedisKeyService , TimeMangerJob ,Ser
 
     public void setResult_isosurface(String result_isosurface) {
         this.result_isosurface = result_isosurface;
+    }
+
+    public JSONObject getJson() {
+        return json;
     }
 
     @Override

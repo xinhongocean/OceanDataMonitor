@@ -15,8 +15,7 @@ public class MonitorInfoDAOImpl implements MonitorInfoDAO{
     Logger logger = Logger.getLogger(MonitorInfoDAOImpl.class);
     public MonitorInfoDAOImpl() {
     }
-
-    PropertyUtil propertyUtil =new PropertyUtil();
+    static PropertyUtil propertyUtil =new PropertyUtil();
     @Override
     public JSONObject getInfo(String source) {
         loadConf(source);
@@ -48,7 +47,7 @@ public class MonitorInfoDAOImpl implements MonitorInfoDAO{
     private void loadConf(String source){
         propertyUtil = new PropertyUtil();
         if(source.contains("gfs") || source.contains("GFS")){   //GFS
-            propertyUtil.loadProps("GFSProcess.properties");
+            propertyUtil.loadProps("monitorConf/GFSProcess.properties");
         }
 
         logger.info(propertyUtil);

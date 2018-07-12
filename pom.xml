@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>groupId</groupId>
-    <artifactId>OceanDataMonitor</artifactId>
+    <groupId>group</groupId>
+    <artifactId>group1</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>OceanDataMonitor</name>
+    <name>group1 Maven Webapp</name>
 
     <properties>
         <build.file.encoding>UTF-8</build.file.encoding>
         <!--spring-->
         <spring.version>4.2.4.RELEASE</spring.version>
-        <slf4j.version>1.7.7</slf4j.version>
+        <!--<slf4j.version>1.7.7</slf4j.version>-->
+        <slf4j.version>1.5.6</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
         <commons-io.version>2.4</commons-io.version>
         <redis.clients.version>2.8.1</redis.clients.version>
@@ -266,6 +267,21 @@
             <groupId>org.apache.oodt</groupId>
             <artifactId>opendapps</artifactId>
             <version>0.9</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.54</version>
         </dependency>
 
 

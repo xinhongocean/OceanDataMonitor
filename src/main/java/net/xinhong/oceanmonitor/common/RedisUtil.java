@@ -60,11 +60,9 @@ public class RedisUtil {
                 redisInfo.put(str, info);
             } catch (Exception e) {
                 logger.error(e.getMessage());
-                if(jedisPool!=null&&jedis!=null)
-                    jedisPool.returnBrokenResource(jedis);
                 redisInfo.put(str, "fail");
             }finally {
-                jedisPool.close();
+                jedis.close();
             }
         }
     }

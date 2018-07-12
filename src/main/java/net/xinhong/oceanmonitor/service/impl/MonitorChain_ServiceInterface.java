@@ -11,19 +11,19 @@ import org.springframework.stereotype.Service;
 public class MonitorChain_ServiceInterface extends MonitorChain {
     public MonitorChain_ServiceInterface() {
     }
-    @Autowired
-    ServiceInterfaceImpl serviceInterface;
+//    @Autowired
+    ServiceInterfaceImpl serviceInterface = new ServiceInterfaceImpl();
     @Override
     public boolean isOk(String type) {
-        ServiceInterfaceImpl serviceInterface = new ServiceInterfaceImpl();
+        serviceInterface = new ServiceInterfaceImpl();
         serviceInterface.check(type);
-        return false;       ///////////////////////////////
-//        return serviceInterface.getJson().isEmpty();
+        return serviceInterface.getJson().isEmpty();
+//        System.out.println("ServiceInterface"+false);
+//        return false;
     }
 
     @Override
     public String getErrInfo(String type) {
-//        return "Type:"+type+"  Model:ServiceInterface"+"  Body:"+serviceInterface.getJson();
-        return "Type:"+type+"  Model:ServiceInterface"+"  Body:";
+        return "Type:"+type+"  Model:ServiceInterface"+"  Body:"+serviceInterface.getJson();
     }
 }

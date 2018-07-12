@@ -13,7 +13,8 @@ public class MonitorChain_Mysql extends MonitorChain {
 
     @Override
     public boolean isOk(String type) {
-        return false;
+        System.out.println("mysql "+true);
+        return true;
     }
 
     @Override

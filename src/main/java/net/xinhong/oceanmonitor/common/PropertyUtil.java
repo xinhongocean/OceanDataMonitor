@@ -16,13 +16,17 @@ import java.util.Properties;
 public class PropertyUtil {
     private static final Logger logger = LoggerFactory.getLogger(PropertyUtil.class);
     private static Properties props;
+
+    public PropertyUtil() {
+    }
+
     static{
         loads();
     }
     //更改配置文件名
     public static void loads(){
-//        loadProps("jdbc.properties");
-//        loadProps("log4j.properties");
+        loadProps("monitorConf/GFSProcess.properties");
+        loadProps("monitorConf/redisKey.properties");
     }
     synchronized static public void loadProps(String confName){
         logger.info("开始加载properties文件内容.......");

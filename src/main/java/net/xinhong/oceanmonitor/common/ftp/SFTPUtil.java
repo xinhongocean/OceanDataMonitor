@@ -1,6 +1,7 @@
 package net.xinhong.oceanmonitor.common.ftp;
 
 import com.jcraft.jsch.*;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.hibernate.loader.custom.Return;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -158,7 +159,7 @@ public class SFTPUtil {
                 list.add(ch.getFilename());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("进入文件夹失败");
         }
         return list;
     }
@@ -194,17 +195,22 @@ public class SFTPUtil {
                 list.add(temp);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("进入文件夹失败");
         }
         return list;
     }
     //封装了解释预报的某个类型的文件读取
     public static List<String> getOnlyFileNames_JSYB(String directory, ChannelSftp sftp ,String fileStyle){
         List<String> result = new ArrayList<>();
-        List<String> list = getOnlyFileNames(directory , sftp , fileStyle);
-        for (String filename : list){
-            if (filename.contains("XHGFS_G_DB_") && filename.length() ==28 )
-                result.add(filename);
+        try {
+            Vector<ChannelSftp.LsEntry> v = sftp.ls(directory);
+            for (ChannelSftp.LsEntry ch:v) {
+                String filename = ch.getFilename();
+                if (filename.contains("XHGFS_G_DB_") && filename.length() ==28 )
+                    result.add(filename);
+            }
+        } catch (SftpException e) {
+            logger.error("进入文件夹失败");
         }
         return result;
     }

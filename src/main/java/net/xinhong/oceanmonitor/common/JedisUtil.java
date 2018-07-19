@@ -102,6 +102,31 @@ public class JedisUtil {
         jedisCluster = new JedisCluster(nodes,5000);
         return jedisCluster;
     }
+    public static JedisCluster connRedis(String hostLast) {
+        try {
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+//            System.out.println(classLoader.getResource("").toString());
+            if (classLoader.getResourceAsStream("redis.properties") == null) {
+                proper.load(new FileInputStream(new File("redis.properties")));
+            } else {
+                proper.load(classLoader.getResourceAsStream("redis.properties"));
+            }
+            ipAddress = proper.getProperty("redis.ip" +"."+ hostLast);
+//            System.out.println(ipAddress);
+            for (int i = 0; i <= 9; i++) {
+                ports.add(proper.getProperty("redis.port" + i +"."+hostLast));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        HashSet<HostAndPort> nodes = new HashSet<HostAndPort>();
+        for (int i = 0; i < ports.size(); i++) {
+            String s = ports.get(i);
+            nodes.add(new HostAndPort(ipAddress, Integer.parseInt(ports.get(i))));
+        }
+        jedisCluster = new JedisCluster(nodes,5000);
+        return jedisCluster;
+    }
 
     /**
      * 从jedis连接池中获取获取jedis对象

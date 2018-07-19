@@ -12,18 +12,19 @@ public class MonitorChain_ServiceInterface extends MonitorChain {
     public MonitorChain_ServiceInterface() {
     }
 //    @Autowired
-    ServiceInterfaceImpl serviceInterface = new ServiceInterfaceImpl();
+//    ServiceInterfaceServiceImpl serviceInterface ;
+    ServiceInterfaceServiceImpl serviceInterface = new ServiceInterfaceServiceImpl();
     @Override
     public boolean isOk(String type) {
-        serviceInterface = new ServiceInterfaceImpl();
+//        serviceInterface = new ServiceInterfaceServiceImpl();
         serviceInterface.check(type);
-        return serviceInterface.getJson().isEmpty();
+        return serviceInterface.getmUnit().getJson().isEmpty();
 //        System.out.println("ServiceInterface"+false);
 //        return false;
     }
 
     @Override
     public String getErrInfo(String type) {
-        return "Type:"+type+"  Model:ServiceInterface"+"  Body:"+serviceInterface.getJson();
+        return "Type:"+type+"  Model:ServiceInterface"+"  Body:"+serviceInterface.getmUnit().getJson();
     }
 }

@@ -1,8 +1,6 @@
 package net.xinhong.oceanmonitor.service.impl;
 
 import net.xinhong.oceanmonitor.service.MonitorChain;
-import net.xinhong.oceanmonitor.service.RedisKeyService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,16 +15,16 @@ public class MonitorChain_Redis extends MonitorChain {
     RedisKeyServiceImpl redisKeyService = new RedisKeyServiceImpl();
     @Override
     public boolean isOk(String type) {
-        float dataRate =redisKeyService.checkKeys(type);    //自动查询
-        System.out.println("redis"+(dataRate));
-        return (dataRate>24)? true:false;
-//        System.out.println("redis  " +false);
-//        return false;
+//        float dataRate =redisKeyService.check(type);    //自动查询
+//        System.out.println("redis"+(dataRate));
+//        return (dataRate>99)? true:false;
+        System.out.println("redis  " +false);
+        return true;
     }
 
     @Override
     public String getErrInfo(String type) {
 //        return "error:redis";
-        return "Type:"+type+"  Model:RedisKeyService"+"  Body:"+redisKeyService.getJson();
+        return "Type:"+type+"  Model:RedisKeyService"+"  Body:"+redisKeyService.getmUnit().getJson();
     }
 }

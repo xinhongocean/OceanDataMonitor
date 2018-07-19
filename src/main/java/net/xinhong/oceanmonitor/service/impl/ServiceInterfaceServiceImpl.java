@@ -2,8 +2,9 @@ package net.xinhong.oceanmonitor.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import net.xinhong.oceanmonitor.common.JSONUtil;
+import net.xinhong.oceanmonitor.dao.impl.MUnit;
 import net.xinhong.oceanmonitor.dao.impl.ServiceInterfaceElement;
-import net.xinhong.oceanmonitor.service.ServiceInterface;
+import net.xinhong.oceanmonitor.service.MonitorUnitService;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -12,42 +13,44 @@ import java.io.Serializable;
  * Created by Administrator on 2018/6/26.
  */
 @Service
-public class ServiceInterfaceImpl implements ServiceInterface,Serializable {
-    private JSONObject json = new JSONObject();
-    public ServiceInterfaceImpl(){
+public class ServiceInterfaceServiceImpl implements MonitorUnitService,Serializable {
+    private MUnit mUnit;
+    public ServiceInterfaceServiceImpl(){
 
     }
     /**
      * 功能：监测所有接口json，
      * 监测方式，查看返回的json中的某一个要素值
      */
-    public void check(){
-        if (!json.isEmpty()) {
-            json.clear();
-        }
-        boolean flag = true;
-        for (ServiceInterfaceElement element:ServiceInterfaceElement.values()) {
-            flag = simpleCheck(element);
-            if (!flag) {
-                json.put(element.getType() + "----" + element.getcName(), 0);
-            }
-        }
-    }
+
     @Override
-    public void check(String type){
-        if (!json.isEmpty()) {
-            json.clear();
-        }
+    public float check(String type){
+        float dataRate = simpleCheck(type).getDataRate();
+        return dataRate;
+    }
+
+    @Override
+    public MUnit simpleCheck(String type) {
+        mUnit = new MUnit();
         boolean flag = true;
+        int eleNum = 0;
+        int eleNum_error = 0;
+
         for (ServiceInterfaceElement element:ServiceInterfaceElement.values()) {
             if(!element.getType().equals(type)) {
                 continue;
             }
-            flag = simpleCheck(element);
+            eleNum++;
+            flag = simpleCheckEle(element);
             if (!flag) {
-                json.put(element.getType() + "----" + element.getcName(), 0);
+                eleNum_error++;
+                mUnit.getJson().put(element.getType() + "----" + element.getcName(), 0);
             }
         }
+        mUnit.setDataNum(eleNum);
+        float dataRate = (float) ( eleNum - eleNum_error ) / eleNum * 100;
+        mUnit.setDataRate(dataRate);
+        return mUnit;
     }
 
     /**
@@ -59,7 +62,7 @@ public class ServiceInterfaceImpl implements ServiceInterface,Serializable {
      * （云图，雷达，日本传真，欧洲预报，pm2.5）、气候产品、GFS、葵花8相关服务接口、等值线颜色属性查询
      * 其他、图例图片、redis信息查询
      */
-    private boolean simpleCheck(ServiceInterfaceElement element){
+    private boolean simpleCheckEle(ServiceInterfaceElement element){
         JSONObject json = null;
         try {
             json = JSONUtil.readJsonFromUrl(element.geturl());
@@ -72,16 +75,16 @@ public class ServiceInterfaceImpl implements ServiceInterface,Serializable {
         return true;
     }
 
-    public JSONObject getJson() {
-        return json;
-    }
-
-    public void setJson(JSONObject json) {
-        this.json = json;
-    }
-
     private boolean judgeData(JSONObject json){
         String jsonObject =  json.get("data").toString();
         return (!(jsonObject ==null ||jsonObject.isEmpty() ||jsonObject.length()<5 ))?true:false;
+    }
+
+    public MUnit getmUnit() {
+        return mUnit;
+    }
+
+    public void setmUnit(MUnit mUnit) {
+        this.mUnit = mUnit;
     }
 }

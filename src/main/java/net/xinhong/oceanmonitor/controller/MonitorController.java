@@ -64,22 +64,7 @@ public class MonitorController {
     @RequestMapping(value = "/serverinterface", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json;charset=UTF-8")
     public final void getServerInterfaceMonitor(HttpServletRequest request, HttpServletResponse response) {
-        // TODO: 2018/7/10  serverinterface部分需要完善
-        String type=request.getParameter("type");
-        String redisDataRate = Float.toString(timeMangerJob.checkKeys(type)) + "%";
-        String redisTime = timeMangerJob.getDate();     //先获取数据，后获取日期
-        try {
-            JSONObject resJSON = new JSONObject();
-            resJSON.put("type" , type);
-            resJSON.put("time" , redisTime);
-            resJSON.put("dataRate",redisDataRate);
-            JSONUtil.writeJSONToResponse(response, resJSON);
-        } catch (Exception e) {
-            logger.error("硬件信息查询失败:" + e);
-            JSONObject resJSON = new JSONObject();
-            resJSON.put("code", ResStatus.SEARCH_ERROR.getStatusCode());
-            JSONUtil.writeJSONToResponse(response, resJSON);
-        }
+
     }
     /**
      * redis
@@ -89,21 +74,7 @@ public class MonitorController {
     @RequestMapping(value = "/redis", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json;charset=UTF-8")
     public final void getRedisMonitor(HttpServletRequest request, HttpServletResponse response) {
-        String type=request.getParameter("type");
-        String redisDataRate = Float.toString(timeMangerJob.checkKeys(type)) + "%";
-        String redisTime = timeMangerJob.getDate();     //先获取数据，后获取日期
-        try {
-            JSONObject resJSON = new JSONObject();
-            resJSON.put("type" , type);
-            resJSON.put("time" , redisTime);
-            resJSON.put("dataRate",redisDataRate);
-            JSONUtil.writeJSONToResponse(response, resJSON);
-        } catch (Exception e) {
-            logger.error("硬件信息查询失败:" + e);
-            JSONObject resJSON = new JSONObject();
-            resJSON.put("code", ResStatus.SEARCH_ERROR.getStatusCode());
-            JSONUtil.writeJSONToResponse(response, resJSON);
-        }
+
     }
 
     @RequestMapping(value = "/dataadress", method = {RequestMethod.POST, RequestMethod.GET},
